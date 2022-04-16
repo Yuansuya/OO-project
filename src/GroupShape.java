@@ -15,7 +15,11 @@ public class GroupShape extends MyShape
 	protected void DrawShape(Graphics g)
 	{
 		for(MyShape sh : this.List_shape)
+		{
+			sh.IsConnectorShow = false;
+			sh.IsNameShow = false;
 			sh.DrawShape(g);
+		}
 		for(int start = 0 ; start < 4 ; ++start )
 		{
 			int end = start +1 ;
