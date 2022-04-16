@@ -1,28 +1,34 @@
+package MyPanel;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import MyObserver.*;
 
 
-public class ButtonPanel extends JPanel implements ActionListener
+public class ButtonPanel extends JPanel implements ActionListener, ButtonState
 {
+	private java.util.List<MyObserver> observers = new ArrayList<>();
+	
+	
 	private int LastMode = -1;
 	private int CurrentMode = -1;
-	
 	
 	//introduce button
 	private JButton[] buttons;
 	private int NUM_BUTTONS = 6;      //number of button
 	private	int next_button_offset = 90; // next button position
 	private	int button_size = 70;        // button size
-	private	int ori_button_pos = 20;     // original position
-	private String[] icons_path = {"./images/0.png","./images/1.png","./images/2.png","./images/3.png","./images/4.png","./images/5.png"};
+	private String[] icons_path = {"../images/0.png","../images/1.png","../images/2.png","../images/3.png","../images/4.png","../images/5.png"};
 	private	String[] button_name = {"select","association","generalization","composition","class","use"};
 	
-	public ButtonPanel()
+	public ButtonPanel(Point StartPoint,int WidthSize,int HeightSize)
 	{
 		this.setLayout(null);
-		int[] address = {ori_button_pos,ori_button_pos,button_size,button_size};
+		this.setLocation(StartPoint.x, StartPoint.y);
+		this.setSize(WidthSize, HeightSize);
+		this.setBackground(Color.GRAY);
+		int[] address = {StartPoint.x, StartPoint.y,button_size,button_size};
 		buttons = new JButton[6];
 		for(int i = 0; i < NUM_BUTTONS ; ++i)
 		{
@@ -71,16 +77,8 @@ public class ButtonPanel extends JPanel implements ActionListener
 		}
 		if(LastMode == -1)
 			LastMode = CurrentMode;
-	}
-	
-	public static void main(String[] args)
-	{
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-		frame.setSize(800, 600);
-		frame.add(new ButtonPanel());
-		frame.setVisible(true);
+		
+		NotifyObservers();
 	}
 	
 	public int GetCurrentMode()
@@ -89,4 +87,21 @@ public class ButtonPanel extends JPanel implements ActionListener
 	}
 	
 	
+	/*ButtonState implementations begin*/
+	public void addObserver(MyObserver ob)
+	{
+		this.observers.add(ob);
+	}
+	public void removeObserver(MyObserver ob)
+	{
+		this.observers.remove(ob);
+	}
+	public void NotifyObservers()
+	{
+		for(MyObserver ob : observers)
+		{
+			ob.update();
+		}
+	}
+	/*ButtonState implementations end*/
 }
