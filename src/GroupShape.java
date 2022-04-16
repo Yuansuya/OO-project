@@ -12,7 +12,7 @@ public class GroupShape extends MyShape
 		List_shape = Arrays.asList(shapes);
 	}
 	
-	protected void DrawShape(Graphics g)
+	public void DrawShape(Graphics g)
 	{
 		for(MyShape sh : this.List_shape)
 		{
