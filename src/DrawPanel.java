@@ -15,6 +15,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	java.util.List<MyShape> ShapeList ;
 	java.util.List<ShapeRelation> RelationList ;
 	
+	Point LastPressedPoint =null ;
+	MyShape LastPressedShape = null ;
+	
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp) {
 		this.setLayout(null);
@@ -36,10 +39,34 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		{
 			sp.DrawShape(g);
 		}
+		for(ShapeRelation sr :RelationList)
+		{
+			sr.getLine().DrawLine(g);
+		}
 	}
 	
 	//MouseListener implementations mousePressed, mouseClicked, mouseEntered, mouseExited, mouseReleased
-	public void mousePressed(MouseEvent me) {}
+	public void mousePressed(MouseEvent me) 
+	{
+		Point CurrentPoint = me.getPoint();
+		switch(CurrentButtonMode)
+		{
+			case 1:
+			case 2:
+			case 3:
+				for(MyShape sp : ShapeList)
+				{
+					//if the mouse pressed in the shape 
+					if( sp.IsMouseInShape(CurrentPoint) != null)
+					{
+						LastPressedPoint = CurrentPoint;
+						LastPressedShape = sp;
+						break;
+					}
+				}
+				break;
+		}
+	}
 	public void mouseClicked(MouseEvent me) {
 		Point CurrentPoint = me.getPoint();
 		for(MyShape sp : ShapeList)
@@ -51,7 +78,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 			case 0:
 				for(MyShape sp : ShapeList)
 				{
-					if(sp.IsMouseInShape(CurrentPoint))
+					if(sp.IsMouseInShape(CurrentPoint) != null)
 					{
 						sp.setConnectorShow(true);
 						break;
@@ -69,7 +96,77 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	}
 	public void mouseEntered(MouseEvent me) {}
 	public void mouseExited(MouseEvent me) {}
-	public void mouseReleased(MouseEvent me) {}
+	public void mouseReleased(MouseEvent me) 
+	{
+		Point CurrentPoint = me.getPoint();
+		ShapeRelation SR = null;
+		MyShape ReleasedShape = null;
+		switch(CurrentButtonMode)
+		{
+			case 1:
+				if(LastPressedShape != null)
+				{
+					for(MyShape sp : ShapeList)
+					{
+						//if mouse release in the shape 
+						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
+						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
+						{
+							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+							MyLine line = new AssociationLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
+							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							break;
+						}
+					}
+				}
+				break;
+			case 2:
+				if(LastPressedShape != null)
+				{
+					for(MyShape sp : ShapeList)
+					{
+						//if mouse release in the shape 
+						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
+						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
+						{
+							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+							MyLine line = new GeneralizationLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
+							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							break;
+						}
+					}
+				}
+				break;
+			case 3:
+				if(LastPressedShape != null)
+				{
+					for(MyShape sp : ShapeList)
+					{			
+						//if mouse release in the shape
+						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
+						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
+						{
+							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+							MyLine line = new CompositionLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
+							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							break;
+						}
+					}
+				}
+				break;
+		}
+		if(SR != null)
+			RelationList.add(SR);
+		
+		LastPressedShape = null;
+		LastPressedPoint = null;
+		
+		repaint();
+		
+	}
 	
 	//MouseMotionListener implementations mouseDragged, mouseMoved
 	public void mouseDragged(MouseEvent me) {}
