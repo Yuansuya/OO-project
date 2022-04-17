@@ -73,15 +73,49 @@ public class MyShape
 		return IsConnectorShow;
 	}
 	
-	public boolean IsMouseInShape(Point CurrentPoint)
+	// @param CurrentPoint refers to where the mouse point now
+	// output Myshape : return the shape which be pointed if has
+	// 													  else null
+	public MyShape IsMouseInShape(Point CurrentPoint)
 	{
 		int x_axis = CurrentPoint.x - this.Corners[0].x;
 		if(x_axis < 0 || x_axis > this.width)
-			return false;
+			return null;
 		int y_axis = CurrentPoint.y - this.Corners[0].y;
 		if(y_axis < 0 || y_axis > this.height)
-			return false;
-		return true;
-		
+			return null;
+		return this;
 	}
+	
+	//Output is the nubmer of which connector will be connect
+	public int AlignAtConntector(Point CurrentPoint)
+	{
+		int x = CurrentPoint.x;
+		int y = CurrentPoint.y;
+		Map<Double, Integer> distanceTable = new HashMap<>();
+		double Distance_east =  calculateDistanceBetweenPoints(x, y, this.Connectors[0].x, this.Connectors[0].y);
+		double Distance_south =  calculateDistanceBetweenPoints(x, y, this.Connectors[1].x, this.Connectors[1].y);
+		double Distance_west =  calculateDistanceBetweenPoints(x, y, this.Connectors[2].x, this.Connectors[2].y);
+		double Distance_north =  calculateDistanceBetweenPoints(x, y, this.Connectors[3].x, this.Connectors[3].y);
+		distanceTable.put(Distance_east, 0);
+		distanceTable.put(Distance_south, 1);
+		distanceTable.put(Distance_west, 2);
+		distanceTable.put(Distance_north, 3);
+		
+		double min_dis = Math.min(Math.min(Math.min(Distance_east, Distance_south), Distance_west), Distance_north);
+		
+		return distanceTable.get(min_dis);
+	}
+	private double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) 
+	{       
+		return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+	}
+	
+	
+	public Point[] getConnectors()
+	{
+		return this.Connectors;
+	}
+	
+	
 }
