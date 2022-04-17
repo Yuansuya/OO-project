@@ -22,12 +22,24 @@ public class CompositionLine extends MyLine
 	}
 	private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
 	{
-		double x = x0 - super.barb * Math.cos(theta + super.phi);
-        double y = y0 - super.barb * Math.sin(theta + super.phi);
-        g2.draw(new Line2D.Double(x0, y0, x, y));
-        x = x0 - super.barb * Math.cos(theta - super.phi);
-        y = y0 - super.barb * Math.sin(theta - super.phi);
-        g2.draw(new Line2D.Double(x0, y0, x, y));
+		double x1 = x0 - super.barb * Math.cos(theta + super.phi);
+        double y1 = y0 - super.barb * Math.sin(theta + super.phi);
+        g2.draw(new Line2D.Double(x0, y0, x1, y1));
+        double x2 = x0 - super.barb * Math.cos(theta - super.phi);
+        double y2 = y0 - super.barb * Math.sin(theta - super.phi);
+        g2.draw(new Line2D.Double(x0, y0, x2, y2));
+		
+		double middle_x = (x1+x2)/2;
+		double middle_y = (y1+y2)/2;
+		
+		double x3 = x0 + 2*(middle_x-x0);
+		double y3 = y0 + 2*(middle_y-y0);
+		
+		g2.draw(new Line2D.Double(x1, y1, x3, y3));
+		g2.draw(new Line2D.Double(x2, y2, x3, y3));
+		
+		
+		g2.draw(new Line2D.Double(super.StartPoint.x+super.offset, super.StartPoint.y+super.offset, x3, y3 ));  // draw line 
 	}	
 	
 }

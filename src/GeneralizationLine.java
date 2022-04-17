@@ -22,12 +22,16 @@ public class GeneralizationLine extends MyLine
 	}
 	private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
 	{
-		double x = x0 - super.barb * Math.cos(theta + super.phi);
-        double y = y0 - super.barb * Math.sin(theta + super.phi);
-        g2.draw(new Line2D.Double(x0, y0, x, y));
-        x = x0 - super.barb * Math.cos(theta - super.phi);
-        y = y0 - super.barb * Math.sin(theta - super.phi);
-        g2.draw(new Line2D.Double(x0, y0, x, y));
+		double x1 = x0 - super.barb * Math.cos(theta + super.phi);
+        double y1 = y0 - super.barb * Math.sin(theta + super.phi);
+        g2.draw(new Line2D.Double(x0, y0, x1, y1));
+        double x2 = x0 - super.barb * Math.cos(theta - super.phi);
+        double y2 = y0 - super.barb * Math.sin(theta - super.phi);
+        g2.draw(new Line2D.Double(x0, y0, x2, y2));
+		
+		g2.draw(new Line2D.Double(x1, y1, x2, y2));  //close triangle
+		
+		g2.draw(new Line2D.Double(super.StartPoint.x+super.offset, super.StartPoint.y+super.offset, (x1+x2)/2,(y1+y2)/2 ));  // draw line 
 	}	
 	
 }
