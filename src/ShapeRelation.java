@@ -8,17 +8,22 @@ public class ShapeRelation
 {
 	MyShape StartShape ;
 	MyShape EndShape ;
-	int StartDir; //0: East, 1: West, 2: South, 3: North
-	int EndDir; //0: East, 1: West, 2: South, 3: North
-	MyLine ConnectionLine;	
+	int StartConnector; //0: East, 1: West, 2: South, 3: North
+	int EndConnector; //0: East, 1: West, 2: South, 3: North
+	private MyLine ConnectionLine;	
 	
 	
 	public ShapeRelation(MyShape _StartShape, MyShape _EndShape, int _StartDir, int _EndDir, MyLine _ConnectionLine)
 	{
 		this.StartShape = _StartShape;
 		this.EndShape = _EndShape;
-		this.StartDir = _StartDir;
-		this.EndDir = _EndDir;
+		this.StartConnector = _StartDir;
+		this.EndConnector = _EndDir;
 		this.ConnectionLine = _ConnectionLine;
+	}
+	
+	public MyLine getLine()
+	{
+		return this.ConnectionLine;
 	}
 }
