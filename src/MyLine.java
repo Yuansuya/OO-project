@@ -6,7 +6,7 @@ public class MyLine
 {
 	protected Point StartPoint;
 	protected Point EndPoint;
-	protected final int offset = 5;
+	protected final int offset = 0;
 	
 	protected final double phi = Math.PI/6;  // 30 degrees barb angle
 	protected final int barb = 20;   //barb length
