@@ -9,3 +9,9 @@ Object-Oriented analysis and design Project
 ```shell
 javac -d ../classes -cp ../classes *.java
 ```
+### Execute
+
+進到src目錄下執行指令
+```shell
+java -cp ../classes MainFrame
+```
