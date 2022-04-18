@@ -13,11 +13,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private ButtonPanel BP;   // for Observable
 	private int CurrentButtonMode = -1;
 	java.util.List<MyShape> ShapeList ;
-	java.util.List<ShapeRelation> RelationList ;
+	java.util.List<MyLine> LineList ;
 	
 	Point LastPressedPoint =null ;
 	MyShape LastPressedShape = null ;
-	
+	MyShape DraggedShape = null;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp) {
 		this.setLayout(null);
@@ -28,7 +28,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		this.addMouseMotionListener(this);
 		this.BP = bp;
 		ShapeList = new ArrayList<>();
-		RelationList = new ArrayList<>();
+		LineList = new ArrayList<>();
 	}
 	
 	public void paint(Graphics g)
@@ -39,9 +39,10 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		{
 			sp.DrawShape(g);
 		}
-		for(ShapeRelation sr :RelationList)
+		for(MyLine ln :LineList)
 		{
-			sr.getLine().DrawLine(g);
+			ln.setPosition();
+			ln.DrawLine(g);
 		}
 	}
 	
@@ -99,10 +100,14 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	public void mouseReleased(MouseEvent me) 
 	{
 		Point CurrentPoint = me.getPoint();
-		ShapeRelation SR = null;
+		MyLine line =null;
 		MyShape ReleasedShape = null;
 		switch(CurrentButtonMode)
 		{
+			case 0:
+				DraggedShape = null;
+				// System.out.println("Relaease Dragged");
+				break;
 			case 1:
 				if(LastPressedShape != null)
 				{
@@ -114,8 +119,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 						{
 							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
 							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							MyLine line = new AssociationLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
-							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 							break;
 						}
 					}
@@ -132,8 +136,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 						{
 							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
 							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							MyLine line = new GeneralizationLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
-							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 							break;
 						}
 					}
@@ -150,16 +153,15 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 						{
 							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
 							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							MyLine line = new CompositionLine(LastPressedShape.getConnectors()[Num_StartConnector], ReleasedShape.getConnectors()[Num_EndConnector]);
-							SR = new ShapeRelation(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector, line);
+							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 							break;
 						}
 					}
 				}
 				break;
 		}
-		if(SR != null)
-			RelationList.add(SR);
+		if(line != null)
+			LineList.add(line);
 		
 		LastPressedShape = null;
 		LastPressedPoint = null;
@@ -169,7 +171,35 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	}
 	
 	//MouseMotionListener implementations mouseDragged, mouseMoved
-	public void mouseDragged(MouseEvent me) {}
+	public void mouseDragged(MouseEvent me) 
+	{
+		
+		Point CurrentPoint = me.getPoint();
+		switch(CurrentButtonMode)
+		{
+			case 0:	
+				if(DraggedShape == null)
+				{
+					for(MyShape sp : ShapeList)
+					{
+						DraggedShape = sp.IsMouseInShape(CurrentPoint);
+						if(DraggedShape != null)
+							break;
+					}
+				}
+				else
+				{
+					DraggedShape.setCornersLocation(CurrentPoint);
+					DraggedShape.setConnectorsLocation(CurrentPoint);
+					// System.out.println("asdb  " + DraggedShape.getConnectors()[0]);
+					
+				}
+				 
+				break;
+		}
+		repaint();
+		
+	}
 	public void mouseMoved(MouseEvent me){}
 	
 	

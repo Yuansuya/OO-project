@@ -17,10 +17,11 @@ public class MainFrame
 		/*Panels and MenuBar add begin*/
 		
 		ButtonPanel buttonpanel = new ButtonPanel(new Point(10, 10), 100, 550);
-		frame.add(buttonpanel);
 		DrawPanel drawpanel = new DrawPanel(new Point(150,10), 600, 550,buttonpanel);
-		frame.add(drawpanel);
 		MyMenuBar mb = new MyMenuBar();
+		
+		frame.add(buttonpanel);
+		frame.add(drawpanel);
 		frame.setMenuBar(mb);
 		/*Panels and MenuBar add end */
 		
