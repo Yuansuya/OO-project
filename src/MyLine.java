@@ -2,8 +2,13 @@ package MyLine;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import MyShape.*;
 public class MyLine
 {
+	protected MyShape StartShape;
+	protected MyShape EndShape;
+	protected int StartConnector;
+	protected int EndConnector;
 	protected Point StartPoint;
 	protected Point EndPoint;
 	protected final int offset = 0;
@@ -14,12 +19,19 @@ public class MyLine
 	{
 		;
 	}
-	public MyLine(Point SP, Point EP)
+	public MyLine(MyShape StartShape, MyShape EndShape, int StartConnector, int EndConnector)
 	{
-		this.StartPoint =SP;
-		this.EndPoint = EP;
+		this.StartShape = StartShape;
+		this.EndShape = EndShape;
+		this.StartConnector = StartConnector;
+		this.EndConnector = EndConnector;
+		setPosition();
 	}
-	
+	public void setPosition()
+	{
+		this.StartPoint =this.StartShape.Connectors[this.StartConnector];
+		this.EndPoint = this.EndShape.Connectors[this.EndConnector];
+	}
 	public void DrawLine(Graphics g)
 	{
 		;
