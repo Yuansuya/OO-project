@@ -18,7 +18,7 @@ public class ShapeRelation
 		this.StartShape = _StartShape;
 		this.EndShape = _EndShape;
 		this.StartConnector = _StartDir;
-		this.EndConnector = _EndDir;
+		this.EndConnector = _EndDir;		
 		this.ConnectionLine = _ConnectionLine;
 	}
 	
