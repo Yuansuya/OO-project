@@ -1,4 +1,5 @@
 package MyLine;
+import MyShape.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -7,9 +8,9 @@ import java.awt.geom.*;
 
 public class AssociationLine extends MyLine
 {
-	public AssociationLine(Point SP, Point EP)
+	public AssociationLine(MyShape StartShape, MyShape EndShape, int StartConnector, int EndConnector)
 	{
-		super(SP,EP);
+		super(StartShape, EndShape, StartConnector, EndConnector);
 	}
 	
 	public void DrawLine(Graphics g)

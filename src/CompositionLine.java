@@ -1,4 +1,5 @@
 package MyLine;
+import MyShape.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -6,9 +7,9 @@ import MyLine.*;
 import java.awt.geom.*;
 public class CompositionLine extends MyLine
 {
-	public CompositionLine(Point SP, Point EP)
+	public CompositionLine(MyShape StartShape, MyShape EndShape, int StartConnector, int EndConnector)
 	{
-		super(SP,EP);
+		super(StartShape, EndShape, StartConnector, EndConnector);
 	}
 	
 	public void DrawLine(Graphics g)
