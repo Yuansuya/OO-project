@@ -7,7 +7,7 @@ public class MyShape
 	protected Point[] Corners = new Point[4]; // TopLeft, TopRight, DownRight, DownLeft
 	protected final int height = 100;
 	protected final int width= (int)(height*1.5);
-	protected Point[] Connectors = new Point[4]; //East, south, west, north
+	public Point[] Connectors = new Point[4]; //East, south, west, north
 	protected String name;
 	protected boolean IsNameShow = false;
 	protected boolean IsConnectorShow = false;
@@ -117,5 +117,19 @@ public class MyShape
 		return this.Connectors;
 	}
 	
+	public void setCornersLocation(Point SP)
+	{
+		this.Corners[0] = SP;
+		this.Corners[1] = new Point(SP.x + width, SP.y);
+		this.Corners[2] = new Point(SP.x + width, SP.y + height);
+		this.Corners[3] = new Point(SP.x, SP.y + height);
+	}
+	public void setConnectorsLocation(Point SP)
+	{
+		this.Connectors[0] = new Point(SP.x + width/2, SP.y);
+		this.Connectors[1] = new Point(SP.x + width, SP.y + height/2);
+		this.Connectors[2] = new Point(SP.x + width/2, SP.y + height);
+		this.Connectors[3] = new Point(SP.x, SP.y + height/2);
+	}
 	
 }
