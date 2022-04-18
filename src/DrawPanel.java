@@ -15,9 +15,12 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	java.util.List<MyShape> ShapeList ;
 	java.util.List<MyLine> LineList ;
 	
-	Point LastPressedPoint =null ;
-	MyShape LastPressedShape = null ;
-	MyShape DraggedShape = null;
+	private static Point LastPressedPoint =null ;
+	private static MyShape LastPressedShape = null ;
+	private static MyShape ReleasedShape = null ;
+	
+	
+	private static MyShape DraggedShape = null;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp) {
 		this.setLayout(null);
@@ -52,19 +55,21 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		Point CurrentPoint = me.getPoint();
 		switch(CurrentButtonMode)
 		{
+			case 0:
+				for(MyShape sp : ShapeList)
+				{
+					if(sp.IsMouseInShape(CurrentPoint) != null)
+						sp.setConnectorShow(true);
+					else
+						sp.setConnectorShow(false);
+				}	
+				break;
 			case 1:
 			case 2:
 			case 3:
 				for(MyShape sp : ShapeList)
-				{
-					//if the mouse pressed in the shape 
-					if( sp.IsMouseInShape(CurrentPoint) != null)
-					{
-						LastPressedPoint = CurrentPoint;
-						LastPressedShape = sp;
-						break;
-					}
-				}
+					sp.setConnectorShow(false);
+				LastPressedPoint = CurrentPoint;
 				break;
 		}
 	}
@@ -101,7 +106,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	{
 		Point CurrentPoint = me.getPoint();
 		MyLine line =null;
-		MyShape ReleasedShape = null;
 		switch(CurrentButtonMode)
 		{
 			case 0:
@@ -109,54 +113,27 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 				// System.out.println("Relaease Dragged");
 				break;
 			case 1:
-				if(LastPressedShape != null)
+				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
 				{
-					for(MyShape sp : ShapeList)
-					{
-						//if mouse release in the shape 
-						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
-						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
-						{
-							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
-							break;
-						}
-					}
+					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+					line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 				}
 				break;
 			case 2:
-				if(LastPressedShape != null)
+				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
 				{
-					for(MyShape sp : ShapeList)
-					{
-						//if mouse release in the shape 
-						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
-						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
-						{
-							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
-							break;
-						}
-					}
+					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+					line = new GeneralizationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 				}
 				break;
 			case 3:
-				if(LastPressedShape != null)
+				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
 				{
-					for(MyShape sp : ShapeList)
-					{			
-						//if mouse release in the shape
-						ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
-						if( ReleasedShape != null && LastPressedShape != ReleasedShape)
-						{
-							int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-							int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-							line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
-							break;
-						}
-					}
+					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
+					line = new CompositionLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
 				}
 				break;
 		}
@@ -165,7 +142,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		
 		LastPressedShape = null;
 		LastPressedPoint = null;
-		
+		ReleasedShape = null;
 		repaint();
 		
 	}
@@ -208,7 +185,19 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	{
 		CurrentButtonMode = BP.GetCurrentMode();
 		System.out.println(CurrentButtonMode);
-		
-
+	}
+	
+	private boolean IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
+	{
+		for(MyShape sp : ShapeList)
+		{
+			if(LastPressedShape == null)
+				LastPressedShape = sp.IsMouseInShape(LastPressedPoint);
+			if(ReleasedShape == null)
+				ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
+			if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape)
+				return true;		
+		}
+		return false;
 	}
 }
