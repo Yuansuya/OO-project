@@ -1,5 +1,5 @@
 # OO-project
-Objecy-Oriented analysis and design Project
+Object-Oriented analysis and design Project
 
 ## Project running usage
 
