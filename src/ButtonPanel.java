@@ -100,7 +100,7 @@ public class ButtonPanel extends JPanel implements ActionListener, ButtonState
 	{
 		for(MyObserver ob : observers)
 		{
-			ob.update();
+			ob.updateButtonState();
 		}
 	}
 	/*ButtonState implementations end*/
