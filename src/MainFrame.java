@@ -17,8 +17,8 @@ public class MainFrame
 		/*Panels and MenuBar add begin*/
 		
 		ButtonPanel buttonpanel = new ButtonPanel(new Point(10, 10), 100, 550);
-		DrawPanel drawpanel = new DrawPanel(new Point(150,10), 600, 550,buttonpanel);
 		MyMenuBar mb = new MyMenuBar();
+		DrawPanel drawpanel = new DrawPanel(new Point(150,10), 600, 550,buttonpanel, mb);
 		
 		frame.add(buttonpanel);
 		frame.add(drawpanel);
@@ -26,7 +26,7 @@ public class MainFrame
 		/*Panels and MenuBar add end */
 		
 		buttonpanel.addObserver(drawpanel);
-		
+		mb.addObserver(drawpanel);
 		
 		frame.setVisible(true);
 	}
