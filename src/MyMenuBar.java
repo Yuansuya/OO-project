@@ -2,11 +2,15 @@ package MyMenuBar;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-public class MyMenuBar extends MenuBar implements ActionListener
+import MyObserver.*;
+import java.util.*;
+public class MyMenuBar extends MenuBar implements ActionListener, MenuBarState
 {
 	private int NUM_ITMES = 3;
 	private String MenuName = "Edit";
 	private String[] ItemName  = {"group","ungroup", "ChangeObjName"};
+	private java.util.List<MyObserver> observers = new ArrayList<>();
+	private int CurrentBarMode = -1;
 	public MyMenuBar()
 	{
 		Menu menuFile = new Menu(MenuName);
@@ -19,8 +23,48 @@ public class MyMenuBar extends MenuBar implements ActionListener
 			menuFile.add(items[i]);
 		}
 		this.add(menuFile); 
+		
 	}
 	
 	
-	public void actionPerformed(ActionEvent e){}
+	public void actionPerformed(ActionEvent e)
+	{
+		switch(e.getActionCommand())
+		{
+			case "0":
+				CurrentBarMode =0;
+				NotifyObservers();
+				break;
+			case "1":
+				CurrentBarMode =1;
+				NotifyObservers();
+				break;
+				
+			case "2":
+				CurrentBarMode =2;
+				NotifyObservers();
+				break;
+		}
+	}
+	
+	public int GetCurrentMode()
+	{
+		return this.CurrentBarMode;
+	}
+	public void addObserver(MyObserver ob)
+	{
+		this.observers.add(ob);
+	}
+	public void removeObserver(MyObserver ob)
+	{
+		this.observers.remove(ob);
+	}
+	
+	public void NotifyObservers()
+	{
+		for(MyObserver ob : observers)
+		{
+			ob.updateBarState();
+		}
+	}
 }
