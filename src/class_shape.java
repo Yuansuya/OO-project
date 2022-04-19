@@ -19,6 +19,8 @@ public class class_shape extends MyShape
 		{
 			super.DrawConnectors(g);
 		}
+		//maybe drawstring can be combine in Myshape class by "Decorator pattern"
+		g.drawString(super.name,super.Corners[0].x+50,super.Corners[0].y+20);
 	}
 	
 	
