@@ -6,9 +6,9 @@ import java.util.*;
 import MyObserver.*;
 
 
-public class ButtonPanel extends JPanel implements ActionListener, ButtonState
+public class ButtonPanel extends JPanel implements ActionListener, MyObserver
 {
-	private java.util.List<MyObserver> observers = new ArrayList<>();
+	private java.util.List<MySubscriber> subscribers = new ArrayList<>();
 	
 	
 	private int LastMode = -1;
@@ -78,7 +78,7 @@ public class ButtonPanel extends JPanel implements ActionListener, ButtonState
 		if(LastMode == -1)
 			LastMode = CurrentMode;
 		
-		NotifyObservers();
+		NotifySubscriber();
 	}
 	
 	public int GetCurrentMode()
@@ -88,17 +88,17 @@ public class ButtonPanel extends JPanel implements ActionListener, ButtonState
 	
 	
 	/*ButtonState implementations begin*/
-	public void addObserver(MyObserver ob)
+	public void addSubscriber(MySubscriber ob)
 	{
-		this.observers.add(ob);
+		this.subscribers.add(ob);
 	}
-	public void removeObserver(MyObserver ob)
+	public void removeSubscriber(MySubscriber ob)
 	{
-		this.observers.remove(ob);
+		this.subscribers.remove(ob);
 	}
-	public void NotifyObservers()
+	public void NotifySubscriber()
 	{
-		for(MyObserver ob : observers)
+		for(MySubscriber ob : subscribers)
 		{
 			ob.updateButtonState();
 		}
