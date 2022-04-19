@@ -1,6 +1,8 @@
 package MyObserver;
+import MyObserver.*;
 public interface MyObserver
 {
-	void updateButtonState();
-	void updateBarState();
+	void addSubscriber(MySubscriber ob);
+	void removeSubscriber(MySubscriber ob);
+	void NotifySubscriber();
 }
