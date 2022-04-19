@@ -132,4 +132,8 @@ public class MyShape
 		this.Connectors[3] = new Point(SP.x, SP.y + height/2);
 	}
 	
+	public Point[] getCorners()
+	{
+		return this.Corners;
+	}
 }
