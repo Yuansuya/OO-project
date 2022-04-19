@@ -9,7 +9,7 @@ import MyShape.*;
 import MyLine.*;
 import MyMenuBar.*;
 
-public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MyObserver
+public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MySubscriber
 {
 	private ButtonPanel BP;   // for Observable
 	private MyMenuBar MB;   // for Observable
