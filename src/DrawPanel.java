@@ -19,7 +19,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private static MyShape LastPressedShape = null ;
 	private static MyShape ReleasedShape = null ;
 	
-	
+	private static boolean SelectOrDrag = false; // false for select, true for drag
 	private static MyShape DraggedShape = null;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp) {
@@ -44,6 +44,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		}
 		for(MyLine ln :LineList)
 		{
+			//Adjust the position to suit the shape position dynamiclly every sigle time
 			ln.setPosition();
 			ln.DrawLine(g);
 		}
@@ -56,13 +57,24 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		switch(CurrentButtonMode)
 		{
 			case 0:
+				//catch the single shape
 				for(MyShape sp : ShapeList)
 				{
 					if(sp.IsMouseInShape(CurrentPoint) != null)
+					{
 						sp.setConnectorShow(true);
+						SelectOrDrag =true;
+					}						
 					else
 						sp.setConnectorShow(false);
 				}	
+				
+				//catch a bouch of shapes
+				if(SelectOrDrag == false)
+				{
+					LastPressedPoint = CurrentPoint;
+				}
+				
 				break;
 			case 1:
 			case 2:
@@ -110,7 +122,18 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		{
 			case 0:
 				DraggedShape = null;
-				// System.out.println("Relaease Dragged");
+				
+				if(LastPressedPoint != null)
+				{
+					Point TopLeft = new Point(Math.min(LastPressedPoint.x, CurrentPoint.x),Math.min(LastPressedPoint.y, CurrentPoint.y));
+					Point DownRight = new Point(Math.max(LastPressedPoint.x, CurrentPoint.x),Math.max(LastPressedPoint.y, CurrentPoint.y));
+					for(MyShape sp : ShapeList)
+					{
+						Point[] corners = sp.getCorners();
+						if(corners[0].x >= TopLeft.x && corners[0].y >= TopLeft.y && corners[2].x <= DownRight.x && corners[2].y <= DownRight.y)
+							sp.setConnectorShow(true);
+					}
+				}
 				break;
 			case 1:
 				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
@@ -143,6 +166,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		LastPressedShape = null;
 		LastPressedPoint = null;
 		ReleasedShape = null;
+		SelectOrDrag = false;
 		repaint();
 		
 	}
@@ -155,23 +179,26 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		switch(CurrentButtonMode)
 		{
 			case 0:	
-				if(DraggedShape == null)
+				if(SelectOrDrag == true)
 				{
-					for(MyShape sp : ShapeList)
+					if(DraggedShape == null)
 					{
-						DraggedShape = sp.IsMouseInShape(CurrentPoint);
-						if(DraggedShape != null)
-							break;
+						for(MyShape sp : ShapeList)
+						{
+							DraggedShape = sp.IsMouseInShape(CurrentPoint);
+							if(DraggedShape != null)
+								break;
+						}
+					}
+					else
+					{
+						DraggedShape.setCornersLocation(CurrentPoint);
+						DraggedShape.setConnectorsLocation(CurrentPoint);
+						// System.out.println("asdb  " + DraggedShape.getConnectors()[0]);
+						
 					}
 				}
-				else
-				{
-					DraggedShape.setCornersLocation(CurrentPoint);
-					DraggedShape.setConnectorsLocation(CurrentPoint);
-					// System.out.println("asdb  " + DraggedShape.getConnectors()[0]);
-					
-				}
-				 
+				
 				break;
 		}
 		repaint();
@@ -180,7 +207,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	public void mouseMoved(MouseEvent me){}
 	
 	
-	//MyObserver implementations update
+	//MyObserver implementations update()
 	public void update()
 	{
 		CurrentButtonMode = BP.GetCurrentMode();
