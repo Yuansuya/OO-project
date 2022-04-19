@@ -25,8 +25,8 @@ public class MainFrame
 		frame.setMenuBar(mb);
 		/*Panels and MenuBar add end */
 		
-		buttonpanel.addObserver(drawpanel);
-		mb.addObserver(drawpanel);
+		buttonpanel.addSubscriber(drawpanel);
+		mb.addSubscriber(drawpanel);
 		
 		frame.setVisible(true);
 	}
