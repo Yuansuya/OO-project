@@ -7,11 +7,14 @@ import MyObserver.*;
 import MyPanel.*;
 import MyShape.*;
 import MyLine.*;
+import MyMenuBar.*;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MyObserver
 {
 	private ButtonPanel BP;   // for Observable
+	private MyMenuBar MB;   // for Observable
 	private int CurrentButtonMode = -1;
+	private int CurrentBarMode = -1;
 	java.util.List<MyShape> ShapeList ;
 	java.util.List<MyLine> LineList ;
 	
@@ -22,7 +25,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private static boolean SelectOrDrag = false; // false for select, true for drag
 	private static MyShape DraggedShape = null;
 	
-	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp) {
+	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb) {
 		this.setLayout(null);
 		this.setLocation(StartPoint.x, StartPoint.y);
 		this.setSize(WidthSize, HeightSize);
@@ -30,6 +33,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.BP = bp;
+		this.MB = mb;
 		ShapeList = new ArrayList<>();
 		LineList = new ArrayList<>();
 	}
@@ -74,7 +78,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 				{
 					LastPressedPoint = CurrentPoint;
 				}
-				
 				break;
 			case 1:
 			case 2:
@@ -208,12 +211,57 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	
 	//MyObserver implementations update()
-	public void update()
+	public void updateButtonState()
 	{
 		CurrentButtonMode = BP.GetCurrentMode();
-		System.out.println(CurrentButtonMode);
+		System.out.println("Button Mode : "  +CurrentButtonMode);
+	}
+	public void updateBarState()
+	{
+		CurrentBarMode = MB.GetCurrentMode();
+		System.out.println("Bar Mode : "  +CurrentBarMode);
+		
+		switch(CurrentBarMode)
+		{
+			case 0:
+				GroupAction();
+				break;
+			case 1:
+				UngroupAction();
+				break;
+			case 2:
+				JFrame f =new JFrame("Change Object Name.");
+				f.setSize(400,300);
+				String input = JOptionPane.showInputDialog("Change Object Name");
+				
+				MyShape ToBeChangeNameShape = null;
+				int NUM_selected = 0;
+				for(MyShape sp : ShapeList)
+				{
+					if(NUM_selected >1)
+						break;
+					if(sp.getConnectorShow() == true)
+					{
+						ToBeChangeNameShape = sp;
+						NUM_selected++;
+					}
+				}
+				if(NUM_selected == 1)
+					ToBeChangeNameShape.setName(input);
+				break;
+		}
+		repaint();
 	}
 	
+	private void GroupAction()
+	{
+		
+	}
+	
+	private void UngroupAction()
+	{
+		
+	}
 	private boolean IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
 	{
 		for(MyShape sp : ShapeList)
