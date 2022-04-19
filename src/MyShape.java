@@ -8,10 +8,10 @@ public class MyShape
 	protected final int height = 100;
 	protected final int width= (int)(height*1.5);
 	public Point[] Connectors = new Point[4]; //East, south, west, north
-	protected String name;
+	protected String name = "";
 	protected boolean IsNameShow = false;
 	protected boolean IsConnectorShow = false;
-	protected int depth ;
+	protected int depth;
 	private final int offset = 5;
 	public MyShape(Point SP)
 	{
@@ -68,7 +68,7 @@ public class MyShape
 		this.IsConnectorShow = b;
 	}
 	
-	public boolean getConnectorShow(MyShape s)
+	public boolean getConnectorShow()
 	{
 		return IsConnectorShow;
 	}
@@ -135,5 +135,10 @@ public class MyShape
 	public Point[] getCorners()
 	{
 		return this.Corners;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }
