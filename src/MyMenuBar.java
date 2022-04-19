@@ -4,12 +4,12 @@ import java.awt.event.*;
 import java.awt.*;
 import MyObserver.*;
 import java.util.*;
-public class MyMenuBar extends MenuBar implements ActionListener, MenuBarState
+public class MyMenuBar extends MenuBar implements ActionListener, MyObserver
 {
 	private int NUM_ITMES = 3;
 	private String MenuName = "Edit";
 	private String[] ItemName  = {"group","ungroup", "ChangeObjName"};
-	private java.util.List<MyObserver> observers = new ArrayList<>();
+	private java.util.List<MySubscriber> subscribers = new ArrayList<>();
 	private int CurrentBarMode = -1;
 	public MyMenuBar()
 	{
@@ -33,16 +33,16 @@ public class MyMenuBar extends MenuBar implements ActionListener, MenuBarState
 		{
 			case "0":
 				CurrentBarMode =0;
-				NotifyObservers();
+				NotifySubscriber();
 				break;
 			case "1":
 				CurrentBarMode =1;
-				NotifyObservers();
+				NotifySubscriber();
 				break;
 				
 			case "2":
 				CurrentBarMode =2;
-				NotifyObservers();
+				NotifySubscriber();
 				break;
 		}
 	}
@@ -51,18 +51,18 @@ public class MyMenuBar extends MenuBar implements ActionListener, MenuBarState
 	{
 		return this.CurrentBarMode;
 	}
-	public void addObserver(MyObserver ob)
+	public void addSubscriber(MySubscriber ob)
 	{
-		this.observers.add(ob);
+		this.subscribers.add(ob);
 	}
-	public void removeObserver(MyObserver ob)
+	public void removeSubscriber(MySubscriber ob)
 	{
-		this.observers.remove(ob);
+		this.subscribers.remove(ob);
 	}
 	
-	public void NotifyObservers()
+	public void NotifySubscriber()
 	{
-		for(MyObserver ob : observers)
+		for(MySubscriber ob : subscribers)
 		{
 			ob.updateBarState();
 		}
