@@ -1,5 +1,6 @@
 package MyObserver;
 public interface MyObserver
 {
-	void update();
+	void updateButtonState();
+	void updateBarState();
 }
