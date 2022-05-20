@@ -1,9 +1,10 @@
-package MyLine;
+package MyGraphic;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import MyShape.*;
-public class MyLine
+import MyGraphic.*;
+
+public class MyLine extends MyGraphic
 {
 	protected MyShape StartShape;
 	protected MyShape EndShape;
@@ -27,12 +28,12 @@ public class MyLine
 		this.EndConnector = EndConnector;
 		setPosition();
 	}
-	public void setPosition()
+	protected void setPosition()
 	{
 		this.StartPoint =this.StartShape.Connectors[this.StartConnector];
 		this.EndPoint = this.EndShape.Connectors[this.EndConnector];
 	}
-	public void DrawLine(Graphics g)
+	public void Draw(Graphics g)
 	{
 		;
 	}
