@@ -3,12 +3,12 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import MyObserver.*;
+import observer_pattern.*;
 
 
-public class ButtonPanel extends JPanel implements ActionListener, MyObserver
+public class ButtonPanel extends JPanel implements ActionListener, Subject
 {
-	private java.util.List<MySubscriber> subscribers = new ArrayList<>();
+	private java.util.List<observer> observers = new ArrayList<>();
 	
 	
 	private int LastMode = -1;
@@ -78,7 +78,7 @@ public class ButtonPanel extends JPanel implements ActionListener, MyObserver
 		if(LastMode == -1)
 			LastMode = CurrentMode;
 		
-		NotifySubscriber();
+		NotifyObserver();
 	}
 	
 	public int GetCurrentMode()
@@ -88,17 +88,17 @@ public class ButtonPanel extends JPanel implements ActionListener, MyObserver
 	
 	
 	/*ButtonState implementations begin*/
-	public void addSubscriber(MySubscriber ob)
+	public void addObserver(observer ob)
 	{
-		this.subscribers.add(ob);
+		this.observers.add(ob);
 	}
-	public void removeSubscriber(MySubscriber ob)
+	public void removeObserver(observer ob)
 	{
-		this.subscribers.remove(ob);
+		this.observers.remove(ob);
 	}
-	public void NotifySubscriber()
+	public void NotifyObserver()
 	{
-		for(MySubscriber ob : subscribers)
+		for(observer ob : observers)
 		{
 			ob.updateButtonState();
 		}
