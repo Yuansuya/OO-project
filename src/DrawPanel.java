@@ -3,27 +3,25 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import MyObserver.*;
+import observer_pattern.*;
 import MyPanel.*;
-import MyShape.*;
-import MyLine.*;
+import MyGraphic.*;
 import MyMenuBar.*;
 
-public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MySubscriber
+public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, observer
 {
 	private ButtonPanel BP;   // for Observable
 	private MyMenuBar MB;   // for Observable
 	private int CurrentButtonMode = -1;
 	private int CurrentBarMode = -1;
-	java.util.List<MyShape> ShapeList ;
-	java.util.List<MyLine> LineList ;
+	private GroupGraphic GPs = new GroupGraphic();
 	
 	private static Point LastPressedPoint =null ;
 	private static MyShape LastPressedShape = null ;
 	private static MyShape ReleasedShape = null ;
 	
-	private static boolean SelectOrDrag = false; // false for select, true for drag
-	private static MyShape DraggedShape = null;
+	private static boolean SelectOrDragMode = false; // false for select, true for drag
+	private static MyShape BeDraggedShape = null;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb) {
 		this.setLayout(null);
@@ -34,83 +32,70 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		this.addMouseMotionListener(this);
 		this.BP = bp;
 		this.MB = mb;
-		ShapeList = new ArrayList<>();
-		LineList = new ArrayList<>();
 	}
 	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
 		g.setColor(Color.black);
-		for(MyShape sp : ShapeList)
-		{
-			sp.DrawShape(g);
-		}
-		for(MyLine ln :LineList)
-		{
-			//Adjust the position to suit the shape position dynamiclly every sigle time
-			ln.setPosition();
-			ln.DrawLine(g);
-		}
+		GPs.Draw(g);
 	}
 	
 	//MouseListener implementations mousePressed, mouseClicked, mouseEntered, mouseExited, mouseReleased
 	public void mousePressed(MouseEvent me) 
 	{
+		System.out.println("Pressed");
 		Point CurrentPoint = me.getPoint();
+		GPs.clearSelectedShapes();
 		switch(CurrentButtonMode)
 		{
 			case 0:
 				//catch the single shape
-				for(MyShape sp : ShapeList)
+				MyShape[] SelectedShape = GPs.GetShapesUnderTheMouse(CurrentPoint);
+				if(SelectedShape == null)
 				{
-					if(sp.IsMouseInShape(CurrentPoint) != null)
-					{
-						sp.setConnectorShow(true);
-						SelectOrDrag =true;
-					}						
-					else
-						sp.setConnectorShow(false);
-				}	
-				
-				//catch a bouch of shapes
-				if(SelectOrDrag == false)
-				{
-					LastPressedPoint = CurrentPoint;
+					//Selected many shape mode 
+					SelectOrDragMode = false;					
 				}
+				else
+				{
+					//Drag a shape mode 
+					SelectOrDragMode = true;
+					BeDraggedShape = SelectedShape[0];
+				}
+				LastPressedPoint = CurrentPoint;
 				break;
 			case 1:
 			case 2:
 			case 3:
-				for(MyShape sp : ShapeList)
-					sp.setConnectorShow(false);
 				LastPressedPoint = CurrentPoint;
 				break;
 		}
 	}
 	public void mouseClicked(MouseEvent me) {
 		Point CurrentPoint = me.getPoint();
-		for(MyShape sp : ShapeList)
-			sp.setConnectorShow(false);
-			
+		// for(MyShape sp : ShapeList)
+			// sp.setConnectorShow(false);
+		GPs.clearSelectedShapes();			
 		
 		switch(CurrentButtonMode)
 		{
 			case 0:
-				for(MyShape sp : ShapeList)
+				MyShape[] SelectedShape = GPs.GetShapesUnderTheMouse(CurrentPoint);
+				if(SelectedShape != null)
 				{
-					if(sp.IsMouseInShape(CurrentPoint) != null)
+					for(MyShape sp : SelectedShape)
 					{
 						sp.setConnectorShow(true);
-						break;
 					}
 				}
+				
 				break;
 			case 4:
-				ShapeList.add(new class_shape(CurrentPoint));
+				GPs.addG(new class_shape(CurrentPoint));
 				break;
 			case 5:
-				ShapeList.add(new UseCase_shape(CurrentPoint));
+				GPs.addG(new UseCase_shape(CurrentPoint));
 				break;
 		}
 		repaint();
@@ -119,57 +104,61 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	public void mouseExited(MouseEvent me) {}
 	public void mouseReleased(MouseEvent me) 
 	{
+		System.out.println("Released");
 		Point CurrentPoint = me.getPoint();
 		MyLine line =null;
+		MyShape[] GoodShape=  null ;
 		switch(CurrentButtonMode)
 		{
 			case 0:
-				DraggedShape = null;
-				
-				if(LastPressedPoint != null)
+				if(SelectOrDragMode == false)
 				{
+					//Select many shapes mode
 					Point TopLeft = new Point(Math.min(LastPressedPoint.x, CurrentPoint.x),Math.min(LastPressedPoint.y, CurrentPoint.y));
 					Point DownRight = new Point(Math.max(LastPressedPoint.x, CurrentPoint.x),Math.max(LastPressedPoint.y, CurrentPoint.y));
-					for(MyShape sp : ShapeList)
-					{
-						Point[] corners = sp.getCorners();
-						if(corners[0].x >= TopLeft.x && corners[0].y >= TopLeft.y && corners[2].x <= DownRight.x && corners[2].y <= DownRight.y)
-							sp.setConnectorShow(true);
-					}
+					GPs.setConnShowUnderTheArea(TopLeft, DownRight);
+				}
+				else
+				{
+					//Drag mode end
+					BeDraggedShape = null ; 
+					SelectOrDragMode = false;
 				}
 				break;
 			case 1:
-				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
+				GoodShape = GPs.IsPriliegedLine(LastPressedPoint, CurrentPoint);
+				if(GoodShape != null)
 				{
-					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-					line = new AssociationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
+					int Num_StartConnector = GoodShape[0].AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = GoodShape[1].AlignAtConntector(CurrentPoint);
+					line = new AssociationLine(GoodShape[0], GoodShape[1], Num_StartConnector, Num_EndConnector);
 				}
 				break;
 			case 2:
-				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
+				GoodShape = GPs.IsPriliegedLine(LastPressedPoint, CurrentPoint);
+				if(GoodShape != null)
 				{
-					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-					line = new GeneralizationLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
+					int Num_StartConnector = GoodShape[0].AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = GoodShape[1].AlignAtConntector(CurrentPoint);
+					line = new GeneralizationLine(GoodShape[0], GoodShape[1], Num_StartConnector, Num_EndConnector);
 				}
+
 				break;
 			case 3:
-				if(IsPriliegedLine(LastPressedPoint, CurrentPoint))
+				GoodShape = GPs.IsPriliegedLine(LastPressedPoint, CurrentPoint);
+				if(GoodShape != null)
 				{
-					int Num_StartConnector = LastPressedShape.AlignAtConntector(LastPressedPoint);
-					int Num_EndConnector = ReleasedShape.AlignAtConntector(CurrentPoint);
-					line = new CompositionLine(LastPressedShape, ReleasedShape, Num_StartConnector, Num_EndConnector);
+					int Num_StartConnector = GoodShape[0].AlignAtConntector(LastPressedPoint);
+					int Num_EndConnector = GoodShape[1].AlignAtConntector(CurrentPoint);
+					line = new CompositionLine(GoodShape[0], GoodShape[1], Num_StartConnector, Num_EndConnector);
 				}
+
 				break;
 		}
 		if(line != null)
-			LineList.add(line);
+			GPs.addG(line);
 		
-		LastPressedShape = null;
-		LastPressedPoint = null;
-		ReleasedShape = null;
-		SelectOrDrag = false;
+
 		repaint();
 		
 	}
@@ -177,31 +166,18 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	//MouseMotionListener implementations mouseDragged, mouseMoved
 	public void mouseDragged(MouseEvent me) 
 	{
-		
+		System.out.println("Dragged");
 		Point CurrentPoint = me.getPoint();
 		switch(CurrentButtonMode)
 		{
 			case 0:	
-				if(SelectOrDrag == true)
+			    if(SelectOrDragMode == true)
 				{
-					if(DraggedShape == null)
-					{
-						for(MyShape sp : ShapeList)
-						{
-							DraggedShape = sp.IsMouseInShape(CurrentPoint);
-							if(DraggedShape != null)
-								break;
-						}
-					}
-					else
-					{
-						DraggedShape.setCornersLocation(CurrentPoint);
-						DraggedShape.setConnectorsLocation(CurrentPoint);
-						// System.out.println("asdb  " + DraggedShape.getConnectors()[0]);
-						
-					}
-				}
-				
+					int offset_x = CurrentPoint.x - LastPressedPoint.x ;
+					int offset_y = CurrentPoint.y - LastPressedPoint.y ;
+					BeDraggedShape.move(offset_x, offset_y);
+					LastPressedPoint = CurrentPoint ; 
+				}				
 				break;
 		}
 		repaint();
@@ -234,20 +210,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 				f.setSize(400,300);
 				String input = JOptionPane.showInputDialog("Change Object Name");
 				
-				MyShape ToBeChangeNameShape = null;
-				int NUM_selected = 0;
-				for(MyShape sp : ShapeList)
-				{
-					if(NUM_selected >1)
-						break;
-					if(sp.getConnectorShow() == true)
-					{
-						ToBeChangeNameShape = sp;
-						NUM_selected++;
-					}
-				}
-				if(NUM_selected == 1)
-					ToBeChangeNameShape.setName(input);
+				// MyShape ToBeChangeNameShape = null;
+				MyShape[] ToBeChangeNameShape = GPs.getSelectedShape();
+				if(ToBeChangeNameShape.length ==1)
+					ToBeChangeNameShape[0].setName(input);
+
 				break;
 		}
 		repaint();
@@ -255,24 +222,23 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	private void GroupAction()
 	{
-		
+		MyShape[] Selected = GPs.getSelectedShape();
+		if(Selected != null && Selected.length > 1 )
+		{
+			GPs.addG(new Group_shape(Selected));
+		}
 	}
 	
 	private void UngroupAction()
 	{
+		Group_shape LastestGroupShape = GPs.getLastestGroupShape() ;
 		
-	}
-	private boolean IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
-	{
-		for(MyShape sp : ShapeList)
+		if(LastestGroupShape != null )
 		{
-			if(LastPressedShape == null)
-				LastPressedShape = sp.IsMouseInShape(LastPressedPoint);
-			if(ReleasedShape == null)
-				ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
-			if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape)
-				return true;		
+			LastestGroupShape.removeGroup();
+			GPs.removeG(LastestGroupShape);
 		}
-		return false;
+			
 	}
+
 }
