@@ -1,9 +1,8 @@
-package MyLine;
-import MyShape.*;
+package MyGraphic;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import MyLine.*;
+import MyGraphic.*;
 import java.awt.geom.*;
 
 public class AssociationLine extends MyLine
@@ -13,8 +12,9 @@ public class AssociationLine extends MyLine
 		super(StartShape, EndShape, StartConnector, EndConnector);
 	}
 	
-	public void DrawLine(Graphics g)
+	public void Draw(Graphics g)
 	{
+		super.setPosition();
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setPaint(Color.BLACK);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
