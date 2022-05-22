@@ -210,9 +210,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 				f.setSize(400,300);
 				String input = JOptionPane.showInputDialog("Change Object Name");
 				
-				// MyShape ToBeChangeNameShape = null;
 				MyShape[] ToBeChangeNameShape = GPs.getSelectedShape();
-				if(ToBeChangeNameShape.length ==1)
+				if(ToBeChangeNameShape != null && ToBeChangeNameShape.length ==1)
 					ToBeChangeNameShape[0].setName(input);
 
 				break;
@@ -231,13 +230,14 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	private void UngroupAction()
 	{
-		Group_shape LastestGroupShape = GPs.getLastestGroupShape() ;
 		
-		if(LastestGroupShape != null )
+		MyShape[] Selected = GPs.getSelectedShape();
+		if(Selected != null && Selected.length == 1 && Selected[0] instanceof Group_shape)
 		{
-			LastestGroupShape.removeGroup();
-			GPs.removeG(LastestGroupShape);
+			((Group_shape)Selected[0]).removeGroup();
+			GPs.removeG(Selected[0]);
 		}
+		
 			
 	}
 

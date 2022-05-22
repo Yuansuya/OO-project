@@ -108,18 +108,4 @@ public class GroupGraphic
 		else
 			return shapes.toArray(new MyShape[shapes.size()]);
 	}
-	
-	
-	public Group_shape getLastestGroupShape()
-	{
-		for(int i = MyShapes.size()-1; i >= 0 ; i--)
-		{
-			MyShape temp = MyShapes.get(i);
-			if(temp instanceof Group_shape)
-			{
-				return (Group_shape)temp ;
-			}
-		}
-		return null; 
-	}
 }
