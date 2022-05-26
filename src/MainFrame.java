@@ -5,6 +5,7 @@ import MyMenuBar.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import MyGraphic.GroupGraphic;
 public class MainFrame 
 {
 	public static void main(String[] args)
@@ -16,9 +17,12 @@ public class MainFrame
 		frame.setSize(800, 600);
 		/*Panels and MenuBar add begin*/
 		
-		ButtonPanel buttonpanel = new ButtonPanel(new Point(10, 10), 100, 550);
+		GroupGraphic Grphics = new GroupGraphic();
+		
+		
+		ButtonPanel buttonpanel = new ButtonPanel(new Point(10, 10), 100, 550, Grphics);
 		MyMenuBar mb = new MyMenuBar();
-		DrawPanel drawpanel = new DrawPanel(new Point(150,10), 600, 550,buttonpanel, mb);
+		DrawPanel drawpanel = new DrawPanel(new Point(150,10), 600, 550,buttonpanel, mb, Grphics);
 		
 		frame.add(buttonpanel);
 		frame.add(drawpanel);

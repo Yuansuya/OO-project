@@ -3,36 +3,38 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import MyGraphic.GroupGraphic;
+import MyButton.*;
+import Mode.*;
 import observer_pattern.*;
 
-
 public class ButtonPanel extends JPanel implements ActionListener, Subject
-{
+{	
+	
+	private GroupGraphic Graphics ;
 	private java.util.List<observer> observers = new ArrayList<>();
-	
-	
-	private int LastMode = -1;
-	private int CurrentMode = -1;
-	
 	//introduce button
-	private JButton[] buttons;
+	private MyButton[] buttons;
 	private int NUM_BUTTONS = 6;      //number of button
 	private	int next_button_offset = 90; // next button position
 	private	int button_size = 70;        // button size
 	private String[] icons_path = {"../images/0.png","../images/1.png","../images/2.png","../images/3.png","../images/4.png","../images/5.png"};
 	private	String[] button_name = {"select","association","generalization","composition","class","use"};
-	
-	public ButtonPanel(Point StartPoint,int WidthSize,int HeightSize)
+	private Mode[] modes ;
+	private Integer currentModeID = -1; 
+	public ButtonPanel(Point StartPoint,int WidthSize,int HeightSize, GroupGraphic gg)
 	{
 		this.setLayout(null);
 		this.setLocation(StartPoint.x, StartPoint.y);
 		this.setSize(WidthSize, HeightSize);
 		this.setBackground(Color.GRAY);
+		this.Graphics = gg ; 
+		modes = new Mode[]{new SelectedMode(Graphics), new AssociationMode(Graphics), new GeneralizationMode(Graphics), new CompositeMode(Graphics), new ClassMode(Graphics), new UseCaseMode(Graphics)};
 		int[] address = {StartPoint.x, StartPoint.y,button_size,button_size};
-		buttons = new JButton[6];
+		buttons = new MyButton[6];
 		for(int i = 0; i < NUM_BUTTONS ; ++i)
 		{
-			buttons[i] = new JButton(new ImageIcon(icons_path[i]));
+			buttons[i] = new MyButton(new ImageIcon(icons_path[i]), modes[i]);
 			buttons[i].setBackground(Color.WHITE);
 			buttons[i].setBounds(address[0],address[1],address[2],address[3]);
 			buttons[i].setActionCommand("" + i);
@@ -41,67 +43,43 @@ public class ButtonPanel extends JPanel implements ActionListener, Subject
 			this.add(buttons[i]);
 		}
 	}
+	//Just set the button color 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(LastMode >= 0)
-		{
-			LastMode = CurrentMode ;
-			buttons[LastMode].setBackground(Color.WHITE);
-		}
-		switch(e.getActionCommand())
-		{
-			case "0":
-				CurrentMode = 0;
-				buttons[0].setBackground(Color.BLACK);
-				break;
-			case "1":
-				CurrentMode = 1;
-				buttons[1].setBackground(Color.BLACK);
-				break;
-			case "2":
-				CurrentMode = 2;
-				buttons[2].setBackground(Color.BLACK);
-				break;
-			case "3":
-				CurrentMode = 3;
-				buttons[3].setBackground(Color.BLACK);
-				break;
-			case "4":
-				CurrentMode = 4;
-				buttons[4].setBackground(Color.BLACK);
-				break;
-			case "5":
-				CurrentMode = 5;
-				buttons[5].setBackground(Color.BLACK);
-				break;
-		}
-		if(LastMode == -1)
-			LastMode = CurrentMode;
-		
+		currentModeID = Integer.valueOf(e.getActionCommand().trim());
+		this.clearButtonsColor();
+		buttons[currentModeID].setColor(Color.BLACK);
 		NotifyObserver();
+		
 	}
-	
-	public int GetCurrentMode()
+	public MyButton GetButtonInProgress()
 	{
-		return this.CurrentMode;
+		return this.buttons[currentModeID];
+	}
+	private void clearButtonsColor()
+	{
+		for(MyButton bt : buttons)
+		{
+			bt.setColor(Color.WHITE);
+		}
 	}
 	
-	
-	/*ButtonState implementations begin*/
+	//observer pattern implement
 	public void addObserver(observer ob)
 	{
-		this.observers.add(ob);
+		observers.add(ob);
 	}
 	public void removeObserver(observer ob)
 	{
-		this.observers.remove(ob);
+		observers.remove(ob);
 	}
 	public void NotifyObserver()
 	{
-		for(observer ob : observers)
+		for(observer o : observers)
 		{
-			ob.updateButtonState();
+			o.updateButtonState();
 		}
 	}
-	/*ButtonState implementations end*/
+	//observer pattern end
+	
 }
