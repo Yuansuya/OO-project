@@ -15,7 +15,7 @@ public class Group_shape extends MyShape
 		
 		for(int i = 0 ; i < shapes.length ; ++i)
 		{
-			this.shapes[i].setConnectorShow(false);
+			this.shapes[i].setPortShow(false);
 			this.shapes[i].setGrouped(true);
 			int[] borders = this.shapes[i].getBorders();
 			for(int j =0 ; j < 4 ;++j)

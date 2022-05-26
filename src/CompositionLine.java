@@ -4,24 +4,27 @@ import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
 import java.awt.geom.*;
+import Port.Port;
 public class CompositionLine extends MyLine
 {
-	public CompositionLine(MyShape StartShape, MyShape EndShape, int StartConnector, int EndConnector)
+	public CompositionLine(Port sp, Port ep)
 	{
-		super(StartShape, EndShape, StartConnector, EndConnector);
+		super(sp, ep);
 	}
 	
 	public void Draw(Graphics g)
 	{
-		super.setPosition();
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setPaint(Color.BLACK);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
-		double theta = Math.atan2((double)(super.EndPoint.y+super.offset - super.StartPoint.y+super.offset), (double)(super.EndPoint.x+super.offset - super.StartPoint.x+super.offset));
-		drawArrow(g2, theta, (double)super.EndPoint.x+super.offset, (double)super.EndPoint.y+super.offset);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		Point startPoint_pos = getPortPosition(startPort);
+		Point endPoint_pos = getPortPosition(endPort);
+		
+		double theta = Math.atan2((double)(endPoint_pos.y+super.offset - startPoint_pos.y+super.offset), (double)(endPoint_pos.x+super.offset - startPoint_pos.x+super.offset));
+		drawArrow(g2, theta, (double)endPoint_pos.x+super.offset, (double)endPoint_pos.y+super.offset, startPoint_pos);
 	}
-	private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
+	private void drawArrow(Graphics2D g2, double theta, double x0, double y0, Point startPoint_pos)
 	{
 		double x1 = x0 - super.barb * Math.cos(theta + super.phi);
         double y1 = y0 - super.barb * Math.sin(theta + super.phi);
@@ -40,7 +43,7 @@ public class CompositionLine extends MyLine
 		g2.draw(new Line2D.Double(x2, y2, x3, y3));
 		
 		
-		g2.draw(new Line2D.Double(super.StartPoint.x+super.offset, super.StartPoint.y+super.offset, x3, y3 ));  // draw line 
+		g2.draw(new Line2D.Double(startPoint_pos.x, startPoint_pos.y, x3, y3 ));  // draw line 
 	}	
 	
 }

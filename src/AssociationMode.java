@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
+import Port.Port;
 public class AssociationMode extends Mode
 {
 	private Point LastPressedPoint =null ;
@@ -29,9 +30,9 @@ public class AssociationMode extends Mode
 		MyShape[] GoodShape = super.graphics.IsPriliegedLine(LastPressedPoint, CurrentPoint);
 		if(GoodShape != null)
 		{
-			int Num_StartConnector = GoodShape[0].AlignAtConntector(LastPressedPoint);
-			int Num_EndConnector = GoodShape[1].AlignAtConntector(CurrentPoint);
-			super.graphics.addG(new AssociationLine(GoodShape[0], GoodShape[1], Num_StartConnector, Num_EndConnector));
+			Port startPort = GoodShape[0].AlignAtPort(LastPressedPoint);
+			Port endPort = GoodShape[1].AlignAtPort(CurrentPoint);
+			super.graphics.addG(new AssociationLine(startPort, endPort));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import MyGraphic.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import Port.Port;
 public class CompositeMode extends Mode
 {
 	private Point LastPressedPoint =null ;
@@ -29,9 +30,9 @@ public class CompositeMode extends Mode
 		MyShape[] GoodShape = super.graphics.IsPriliegedLine(LastPressedPoint, CurrentPoint);
 		if(GoodShape != null)
 		{
-			int Num_StartConnector = GoodShape[0].AlignAtConntector(LastPressedPoint);
-			int Num_EndConnector = GoodShape[1].AlignAtConntector(CurrentPoint);
-			super.graphics.addG(new CompositionLine(GoodShape[0], GoodShape[1], Num_StartConnector, Num_EndConnector));
+			Port startPort = GoodShape[0].AlignAtPort(LastPressedPoint);
+			Port endPort = GoodShape[1].AlignAtPort(CurrentPoint);
+			super.graphics.addG(new CompositionLine(startPort, endPort));
 		}
 	}
 }

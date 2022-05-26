@@ -3,10 +3,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
+// import IBehavior.*;
 public class GroupGraphic
 {
 	java.util.List<MyGraphic> MyGraphics = new ArrayList<>();
 	java.util.List<MyShape> MyShapes = new ArrayList<>();
+	
+	// graphicBehavior bevior ;
+	// List<MyGraphic> shapes ;
+	
+	// public GroupGraphic()
+	// {
+		// shapes = AllShapes.getInstance().getGraphics();
+		// bevior = new GroupBehavior();
+	// }
 	
 	public void Draw(Graphics g)
 	{
@@ -52,7 +62,7 @@ public class GroupGraphic
 		{
 			for(MyShape sp : this.MyShapes)
 			{
-				sp.setConnectorShow(false);
+				sp.setPortShow(false);
 			}
 		}
 	}
@@ -64,7 +74,7 @@ public class GroupGraphic
 			for(MyShape sp : this.MyShapes)
 			{
 				if(sp.IsShapeInArea(TopLeft, DownRight))
-					sp.setConnectorShow(true);
+					sp.setPortShow(true);
 			}
 		}
 		
@@ -100,7 +110,7 @@ public class GroupGraphic
 	
 		for(MyShape sp : this.MyShapes)
 		{
-			if(sp.getConnectorShow() )
+			if(sp.getPortShow() )
 				shapes.add(sp);
 		}
 		if(shapes.size() == 0)

@@ -2,6 +2,7 @@ package MyGraphic;
 import javax.swing.*;
 import java.awt.*;
 import MyGraphic.*;
+import Port.Port ;
 public class class_shape extends MyShape
 {
 	public class_shape(Point SP)
@@ -15,11 +16,13 @@ public class class_shape extends MyShape
 		g.drawLine(super.Corners[0].x, super.Corners[0].y + part, super.Corners[0].x + super.width, super.Corners[0].y + part);
 		g.drawLine(super.Corners[0].x, super.Corners[0].y + part*2, super.Corners[0].x + super.width, super.Corners[0].y + part*2);
 		
-		if(super.IsConnectorShow)
+		if(super.IsPortShow)
 		{
-			super.DrawConnectors(g);
+			for(Port p : super.ports)
+			{
+				p.drawPort(g);
+			}
 		}
-		//maybe drawstring can be combine in Myshape class by "Decorator pattern"
 		g.drawString(super.name,super.Corners[0].x+50,super.Corners[0].y+20);
 	}
 	

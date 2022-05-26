@@ -2,6 +2,7 @@ package MyGraphic;
 import javax.swing.*;
 import java.awt.*;
 import MyGraphic.*;
+import Port.Port ;
 public class UseCase_shape extends MyShape
 {
 	public UseCase_shape(Point SP)
@@ -12,9 +13,12 @@ public class UseCase_shape extends MyShape
 	{
 		g.drawOval(super.Corners[0].x, super.Corners[0].y, super.width, super.height); 
 		
-		if(super.IsConnectorShow)
+		if(super.IsPortShow)
 		{
-			super.DrawConnectors(g);
+			for(Port p : super.ports)
+			{
+				p.drawPort(g);
+			}
 		}
 		
 		g.drawString(super.name,super.Corners[0].x+50,super.Corners[0].y+20);

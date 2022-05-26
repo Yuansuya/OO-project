@@ -2,7 +2,7 @@ package Mode;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import MyGraphic.GroupGraphic;
+import MyGraphic.*;
 public abstract class Mode
 {
 	protected GroupGraphic graphics ;
@@ -13,6 +13,6 @@ public abstract class Mode
 	public abstract void ClickAction(Point CurrentPoint);
 	public abstract void DragAction(Point CurrentPoint);
 	public abstract void PressedAction(Point CurrentPoint);
-	public  abstract void ReleaseAction(Point CurrentPoint);
+	public abstract void ReleaseAction(Point CurrentPoint);
 
 }

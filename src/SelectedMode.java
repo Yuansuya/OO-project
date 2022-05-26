@@ -23,7 +23,7 @@ public class SelectedMode extends Mode
 		{
 			for(MyShape sp : SelectedShape)
 			{
-				sp.setConnectorShow(true);
+				sp.setPortShow(true);
 			}
 		}
 	}

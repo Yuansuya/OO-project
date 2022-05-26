@@ -3,16 +3,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
-
+import Port.Port;
 public class MyLine extends MyGraphic
 {
-	protected MyShape StartShape;
-	protected MyShape EndShape;
-	protected int StartConnector;
-	protected int EndConnector;
-	protected Point StartPoint;
-	protected Point EndPoint;
 	protected final int offset = 0;
+	protected Port startPort ;
+	protected Port endPort ;
 	
 	protected final double phi = Math.PI/6;  // 30 degrees barb angle
 	protected final int barb = 20;   //barb length
@@ -20,22 +16,18 @@ public class MyLine extends MyGraphic
 	{
 		;
 	}
-	public MyLine(MyShape StartShape, MyShape EndShape, int StartConnector, int EndConnector)
+	public MyLine(Port sp, Port ep)
 	{
-		this.StartShape = StartShape;
-		this.EndShape = EndShape;
-		this.StartConnector = StartConnector;
-		this.EndConnector = EndConnector;
-		setPosition();
-	}
-	protected void setPosition()
-	{
-		this.StartPoint =this.StartShape.Connectors[this.StartConnector];
-		this.EndPoint = this.EndShape.Connectors[this.EndConnector];
+		this.startPort = sp ;
+		this.endPort = ep ;
 	}
 	public void Draw(Graphics g)
 	{
 		;
 	}
-	
+
+	protected Point getPortPosition(Port p)
+	{
+		return p.getPosition();
+	}
 }
