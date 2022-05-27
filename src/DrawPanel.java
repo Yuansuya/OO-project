@@ -13,9 +13,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private ButtonPanel BP;   // for Observable
 	private MyMenuBar MB;   // for Observable
 	private MyButton CurrentButton = null;
-	private int CurrentBarMode = -1;
+	private MyMenuItem CurrentMenuItem= null;
 	private MyGraphic GroupGraphics ;
-	private int depth_counter = 0 ;
+	private Integer depth_counter = 0 ;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb, MyGraphic gg ) {
 		this.setLayout(null);
@@ -92,56 +92,18 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	public void updateButtonState()
 	{
 		CurrentButton = BP.GetButtonInProgress();
-		// System.out.println("Button Mode : "  +CurrentButtonMode);
 	}
 	public void updateBarState()
 	{
-		CurrentBarMode = MB.GetCurrentMode();
-		System.out.println("Bar Mode : "  +CurrentBarMode);
+		//observer pattern
+		CurrentMenuItem = MB.GetMenuItemInProgress();
 		
-		switch(CurrentBarMode)
-		{
-			case 0:
-				GroupAction();
-				break;
-			case 1:
-				UngroupAction();
-				break;
-			case 2:
-				JFrame f =new JFrame("Change Object Name.");
-				f.setSize(400,300);
-				String input = JOptionPane.showInputDialog("Change Object Name");
-				
-				MyShape[] ToBeChangeNameShape = GroupGraphics.getSelectedShape();
-				if(ToBeChangeNameShape != null && ToBeChangeNameShape.length ==1)
-					ToBeChangeNameShape[0].setName(input);
-
-				break;
-		}
+		//strategy pattern
+		CurrentMenuItem.getBehavior().perform(GroupGraphics, depth_counter);
+		
 		repaint();
 	}
 	
-	private void GroupAction()
-	{
-		MyShape[] Selected = GroupGraphics.getSelectedShape();
-		if(Selected != null && Selected.length > 1 )
-		{
-			GroupGraphics.addG(new Group_shape(Selected, depth_counter));
-		}
-		depth_counter++;
-	}
 	
-	private void UngroupAction()
-	{
-		
-		MyShape[] Selected = GroupGraphics.getSelectedShape();
-		if(Selected != null && Selected.length == 1 )
-		{
-			if(Selected[0].removeGroup() == true)
-			{
-				GroupGraphics.removeG(Selected[0]);
-			}
-		}
-	}
 
 }

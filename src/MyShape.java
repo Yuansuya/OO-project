@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
 import Port.Port ;
-// import IBehavior.*;
 public class MyShape extends MyGraphic 
 {
 	protected Point[] Corners = new Point[4]; // TopLeft, TopRight, DownRight, DownLeft
@@ -15,12 +14,10 @@ public class MyShape extends MyGraphic
 	protected boolean IsNameShow = false;
 	protected boolean IsPortShow = false; 
 	protected int depth;
-	private final int offset = 5;
 	private boolean Grouped = false ;
-	// private graphicBehavior ;
 	public MyShape()
 	{
-		// graphicBehavior = new ShapeBehavior(this);
+		
 	}
 	public MyShape(Point SP, int depth_counter)
 	{
@@ -35,7 +32,6 @@ public class MyShape extends MyGraphic
 		this.ports[3] = new Port(new Point(SP.x, SP.y + height/2));
 		
 		this.depth = depth_counter;
-		// graphicBehavior = new ShapeBehavior(this);
 	}
 
 
@@ -67,15 +63,15 @@ public class MyShape extends MyGraphic
 	// @param CurrentPoint refers to where the mouse point now
 	// output Myshape : return the shape which be pointed if has
 														  // else null
-	public MyShape getShapeUnderTheMouse(Point CurrentPoint)
+	public boolean IsShapeUnderTheMouse(Point CurrentPoint)
 	{
 		int x_axis = CurrentPoint.x - this.Corners[0].x;
 		if(x_axis < 0 || x_axis > this.width)
-			return null;
+			return false;
 		int y_axis = CurrentPoint.y - this.Corners[0].y;
 		if(y_axis < 0 || y_axis > this.height)
-			return null;
-		return this;
+			return false;
+		return true;
 	}
 	
 	// Output is the nearest port with input current point
@@ -115,10 +111,6 @@ public class MyShape extends MyGraphic
 	}
 	public void move(int offset_x, int offset_y)
 	{
-		// this.Corners[0] = new Point(Corners[0].x += offset_x, Corners[0].y += offset_y);
-		// this.Corners[1] = new Point(Corners[1].x += offset_x, Corners[1].y += offset_y);
-		// this.Corners[2] = new Point(Corners[2].x += offset_x, Corners[2].y += offset_y);
-		// this.Corners[3] = new Point(Corners[3].x += offset_x, Corners[3].y += offset_y);
 		this.revisePosition(offset_x, offset_y);
 		
 		this.ports[0].revisePosition(ports[0].getPosition().x +=offset_x, ports[0].getPosition().y += offset_y);

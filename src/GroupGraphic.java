@@ -6,14 +6,11 @@ import MyGraphic.*;
 // import IBehavior.*;
 public class GroupGraphic extends MyGraphic
 {
-		
-	// graphicBehavior bevior ;
 	java.util.List<MyGraphic> MyGraphics ;
 	
 	public GroupGraphic()
 	{
 		MyGraphics = AllShapes.getInstance().getGraphics();
-		// bevior = new GroupBehavior();
 	}
 	
 	public void Draw(Graphics g)
@@ -39,7 +36,7 @@ public class GroupGraphic extends MyGraphic
 		MyShape return_shape = null ;	
 		for(MyGraphic gp : this.MyGraphics)
 		{
-			if(gp.getShapeUnderTheMouse(p) != null && gp.getGrouped() == false)
+			if(gp.IsShapeUnderTheMouse(p) == true && gp.getGrouped() == false)
 			{
 				//first shape
 				if(return_shape == null)
@@ -89,10 +86,10 @@ public class GroupGraphic extends MyGraphic
 			{
 				if(gp.getGrouped())
 					continue; 
-				if(LastPressedShape == null)
-					LastPressedShape = gp.getShapeUnderTheMouse(LastPressedPoint);
-				if(ReleasedShape == null)
-					ReleasedShape = gp.getShapeUnderTheMouse(CurrentPoint); 
+				if(LastPressedShape == null && gp.IsShapeUnderTheMouse(LastPressedPoint) == true)
+					LastPressedShape = (MyShape)gp ;
+				if(ReleasedShape == null && gp.IsShapeUnderTheMouse(CurrentPoint) == true)
+					ReleasedShape = (MyShape)gp; 
 				if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape )
 					return new MyShape[]{LastPressedShape, ReleasedShape};		
 			}

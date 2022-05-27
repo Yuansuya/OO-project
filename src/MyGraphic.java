@@ -11,7 +11,7 @@ public abstract class MyGraphic
 	//GroupGraphic methods
 	public void addG(MyGraphic o){}
 	public void removeG(MyGraphic o){}
-	public MyShape[] GetShapesUnderTheMouse(Point p)
+	public MyShape GetShapeUnderTheMouse(Point p)
 	{
 		return null;
 	}
@@ -37,9 +37,9 @@ public abstract class MyGraphic
 	{
 		return false;
 	}
-	public MyShape getShapeUnderTheMouse(Point CurrentPoint)
+	public boolean IsShapeUnderTheMouse(Point CurrentPoint)
 	{
-		return null;
+		return false;
 	}
 	public Port AlignMouseAtPort(Point CurrentPoint)
 	{
