@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import MyGraphic.GroupGraphic;
+import MyGraphic.*;
 import MyButton.*;
 import Mode.*;
 import observer_pattern.*;
@@ -11,7 +11,6 @@ import observer_pattern.*;
 public class ButtonPanel extends JPanel implements ActionListener, Subject
 {	
 	
-	private GroupGraphic Graphics ;
 	private java.util.List<observer> observers = new ArrayList<>();
 	//introduce button
 	private MyButton[] buttons;
@@ -22,14 +21,13 @@ public class ButtonPanel extends JPanel implements ActionListener, Subject
 	private	String[] button_name = {"select","association","generalization","composition","class","use"};
 	private Mode[] modes ;
 	private Integer currentModeID = -1; 
-	public ButtonPanel(Point StartPoint,int WidthSize,int HeightSize, GroupGraphic gg)
+	public ButtonPanel(Point StartPoint,int WidthSize,int HeightSize, MyGraphic gg)
 	{
 		this.setLayout(null);
 		this.setLocation(StartPoint.x, StartPoint.y);
 		this.setSize(WidthSize, HeightSize);
 		this.setBackground(Color.GRAY);
-		this.Graphics = gg ; 
-		modes = new Mode[]{new SelectedMode(Graphics), new AssociationMode(Graphics), new GeneralizationMode(Graphics), new CompositeMode(Graphics), new ClassMode(Graphics), new UseCaseMode(Graphics)};
+		modes = new Mode[]{new SelectedMode(gg), new AssociationMode(gg), new GeneralizationMode(gg), new CompositeMode(gg), new ClassMode(gg), new UseCaseMode(gg)};
 		int[] address = {StartPoint.x, StartPoint.y,button_size,button_size};
 		buttons = new MyButton[6];
 		for(int i = 0; i < NUM_BUTTONS ; ++i)

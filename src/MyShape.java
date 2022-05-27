@@ -66,7 +66,7 @@ public class MyShape extends MyGraphic
 	// @param CurrentPoint refers to where the mouse point now
 	// output Myshape : return the shape which be pointed if has
 														  // else null
-	public MyShape IsMouseInShape(Point CurrentPoint)
+	public MyShape getShapeInTheMouse(Point CurrentPoint)
 	{
 		int x_axis = CurrentPoint.x - this.Corners[0].x;
 		if(x_axis < 0 || x_axis > this.width)
@@ -78,7 +78,7 @@ public class MyShape extends MyGraphic
 	}
 	
 	// Output is the nearest port with input current point
-	public Port AlignAtPort(Point CurrentPoint)
+	public Port AlignMouseAtPort(Point CurrentPoint)
 	{
 		
 		int PORTNUM = -1 ;
@@ -103,10 +103,10 @@ public class MyShape extends MyGraphic
 	
 
 	
-	public Point[] getCorners()
-	{
-		return this.Corners;
-	}
+	// public Point[] getCorners()
+	// {
+		// return this.Corners;
+	// }
 	
 	public void setName(String name)
 	{
@@ -114,10 +114,11 @@ public class MyShape extends MyGraphic
 	}
 	public void move(int offset_x, int offset_y)
 	{
-		this.Corners[0] = new Point(Corners[0].x += offset_x, Corners[0].y += offset_y);
-		this.Corners[1] = new Point(Corners[1].x += offset_x, Corners[1].y += offset_y);
-		this.Corners[2] = new Point(Corners[2].x += offset_x, Corners[2].y += offset_y);
-		this.Corners[3] = new Point(Corners[3].x += offset_x, Corners[3].y += offset_y);
+		// this.Corners[0] = new Point(Corners[0].x += offset_x, Corners[0].y += offset_y);
+		// this.Corners[1] = new Point(Corners[1].x += offset_x, Corners[1].y += offset_y);
+		// this.Corners[2] = new Point(Corners[2].x += offset_x, Corners[2].y += offset_y);
+		// this.Corners[3] = new Point(Corners[3].x += offset_x, Corners[3].y += offset_y);
+		this.revisePosition(offset_x, offset_y);
 		
 		this.ports[0].revisePosition(ports[0].getPosition().x +=offset_x, ports[0].getPosition().y += offset_y);
 		this.ports[1].revisePosition(ports[1].getPosition().x +=offset_x, ports[1].getPosition().y += offset_y);
@@ -125,6 +126,15 @@ public class MyShape extends MyGraphic
 		this.ports[3].revisePosition(ports[3].getPosition().x +=offset_x, ports[3].getPosition().y += offset_y);
 	}
 	
+	
+	protected void revisePosition(int offset_x, int offset_y)
+	{
+		for(int i = 0 ; i <4 ; ++i)
+		{
+			this.Corners[i].x += offset_x;
+			this.Corners[i].y += offset_y;
+		}
+	}
 	public void setGrouped(boolean b)
 	{
 		this.Grouped = b ; 
@@ -138,5 +148,10 @@ public class MyShape extends MyGraphic
 	public int[] getBorders()
 	{
 		return new int[]{this.Corners[0].x, this.Corners[0].y, this.Corners[2].x, this.Corners[2].y};
+	}
+	//return true refers to OK that means it's a Group_shape,false refers to NOT OK that means it's not a Group_shape
+	public boolean removeGroup()
+	{
+		return false;
 	}
 }

@@ -6,18 +6,39 @@ import MyGraphic.*;
 
 public class Group_shape extends MyShape
 {
-	MyShape[] shapes ; 	
-	private int offset = 10;
+	private MyShape[] group_shapes ; 	
+	private int offset = 10; //frame all group shpaes by move outward offest 
 	public Group_shape(MyShape[] shapes)
 	{
-		int[] MaxAndMinBorders = new int[]{9999, 9999, 0, 0};//{min_x, min_y, max_x, max_y}
-		this.shapes = shapes;
 		
-		for(int i = 0 ; i < shapes.length ; ++i)
+		this.group_shapes = shapes;
+		joinGroup();
+		
+		int[] MaxAndMinBorders = calculateBorder();//{min_x, min_y, max_x, max_y}
+		super.Corners[0] = new Point(MaxAndMinBorders[0], MaxAndMinBorders[1]);
+		super.Corners[1] = new Point(MaxAndMinBorders[2], MaxAndMinBorders[1]);
+		super.Corners[2] = new Point(MaxAndMinBorders[2], MaxAndMinBorders[3]);
+		super.Corners[3] = new Point(MaxAndMinBorders[0], MaxAndMinBorders[3]);
+
+		super.width = MaxAndMinBorders[2] - MaxAndMinBorders[0] ;
+		super.height = MaxAndMinBorders[3] - MaxAndMinBorders[1]; 
+
+	}
+	
+	private void joinGroup()
+	{
+		for(MyShape shapes : this.group_shapes)
 		{
-			this.shapes[i].setPortShow(false);
-			this.shapes[i].setGrouped(true);
-			int[] borders = this.shapes[i].getBorders();
+			shapes.setPortShow(false);
+			shapes.setGrouped(true);
+		}
+	}
+	private int[] calculateBorder()
+	{
+		int[] MaxAndMinBorders = new int[]{9999, 9999, 0, 0};
+		for(int i = 0 ; i < this.group_shapes.length ; ++i)
+		{
+			int[] borders = this.group_shapes[i].getBorders();
 			for(int j =0 ; j < 4 ;++j)
 			{
 				if(j < 2)
@@ -34,51 +55,46 @@ public class Group_shape extends MyShape
 		MaxAndMinBorders[1] -= offset ;
 		MaxAndMinBorders[2] += offset ;
 		MaxAndMinBorders[3] += offset ;
-		super.Corners[0] = new Point(MaxAndMinBorders[0], MaxAndMinBorders[1]);
-		super.Corners[1] = new Point(MaxAndMinBorders[2], MaxAndMinBorders[1]);
-		super.Corners[2] = new Point(MaxAndMinBorders[2], MaxAndMinBorders[3]);
-		super.Corners[3] = new Point(MaxAndMinBorders[0], MaxAndMinBorders[3]);
-
-		super.width = MaxAndMinBorders[2] - MaxAndMinBorders[0] ;
-		super.height = MaxAndMinBorders[3] - MaxAndMinBorders[1]; 
-
+		
+		return MaxAndMinBorders;
 	}
 	
-	
+	@Override
 	public void Draw(Graphics g)
 	{
-		for(MyShape sp : shapes)
+		//draw shapes in the group
+		for(MyShape sp : group_shapes)
 		{
 			sp.Draw(g);
 		}
-		DrawCorners(g);
-	}
-	
-	private void DrawCorners(Graphics g)
-	{
+		
+		//Draw Border by corners
 		g.drawRect(super.Corners[0].x, super.Corners[0].y, super.width, super.height);
 	}
 	
+	
+	@Override
 	public void move(int offset_x, int offset_y)
 	{
-		super.Corners[0] = new Point(super.Corners[0].x += offset_x, super.Corners[0].y += offset_y);
-		super.Corners[1] = new Point(super.Corners[1].x += offset_x, super.Corners[1].y += offset_y);
-		super.Corners[2] = new Point(super.Corners[2].x += offset_x, super.Corners[2].y += offset_y);
-		super.Corners[3] = new Point(super.Corners[3].x += offset_x, super.Corners[3].y += offset_y);
-		
-		for(MyShape sp : shapes)
+		//move the Group_shape's border
+		super.revisePosition(offset_x, offset_y);
+
+		//move shapes in the gorup
+		for(MyShape sp : group_shapes)
 		{
 			sp.move(offset_x, offset_y);
 		}
 	}
 	
-	public void removeGroup()
+	//return true refers to OK
+	@Override
+	public boolean removeGroup()
 	{
-		for(int i= 0 ; i< this.shapes.length ; ++i)
+		for(int i= 0 ; i< this.group_shapes.length ; ++i)
 		{
-			shapes[i].setGrouped(false);
+			group_shapes[i].setGrouped(false);
 		}
-
+		return true;
 	}
 	
 }

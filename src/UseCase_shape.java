@@ -11,8 +11,10 @@ public class UseCase_shape extends MyShape
 	}
 	public void Draw(Graphics g)
 	{
+		//Draw Usecase object
 		g.drawOval(super.Corners[0].x, super.Corners[0].y, super.width, super.height); 
 		
+		//Draw Ports if needs 
 		if(super.IsPortShow)
 		{
 			for(Port p : super.ports)
@@ -21,6 +23,7 @@ public class UseCase_shape extends MyShape
 			}
 		}
 		
+		//Draw object name
 		g.drawString(super.name,super.Corners[0].x+50,super.Corners[0].y+20);
 	}
 	

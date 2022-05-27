@@ -6,7 +6,6 @@ import MyGraphic.*;
 import Port.Port;
 public class MyLine extends MyGraphic
 {
-	protected final int offset = 0;
 	protected Port startPort ;
 	protected Port endPort ;
 	

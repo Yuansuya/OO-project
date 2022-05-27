@@ -14,9 +14,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private MyMenuBar MB;   // for Observable
 	private MyButton CurrentButton = null;
 	private int CurrentBarMode = -1;
-	private GroupGraphic GPs ;
+	private MyGraphic GroupGraphics ;
 	
-	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb, GroupGraphic gg ) {
+	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb, MyGraphic gg ) {
 		this.setLayout(null);
 		this.setLocation(StartPoint.x, StartPoint.y);
 		this.setSize(WidthSize, HeightSize);
@@ -25,14 +25,14 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		this.addMouseMotionListener(this);
 		this.BP = bp;
 		this.MB = mb;
-		this.GPs = gg; 
+		this.GroupGraphics = gg; 
 	}
 	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
 		g.setColor(Color.black);
-		GPs.Draw(g);
+		GroupGraphics.Draw(g);
 	}
 	
 	//MouseListener implementations mousePressed, mouseClicked, mouseEntered, mouseExited, mouseReleased
@@ -111,7 +111,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 				f.setSize(400,300);
 				String input = JOptionPane.showInputDialog("Change Object Name");
 				
-				MyShape[] ToBeChangeNameShape = GPs.getSelectedShape();
+				MyShape[] ToBeChangeNameShape = GroupGraphics.getSelectedShape();
 				if(ToBeChangeNameShape != null && ToBeChangeNameShape.length ==1)
 					ToBeChangeNameShape[0].setName(input);
 
@@ -122,21 +122,23 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	
 	private void GroupAction()
 	{
-		MyShape[] Selected = GPs.getSelectedShape();
+		MyShape[] Selected = GroupGraphics.getSelectedShape();
 		if(Selected != null && Selected.length > 1 )
 		{
-			GPs.addG(new Group_shape(Selected));
+			GroupGraphics.addG(new Group_shape(Selected));
 		}
 	}
 	
 	private void UngroupAction()
 	{
 		
-		MyShape[] Selected = GPs.getSelectedShape();
-		if(Selected != null && Selected.length == 1 && Selected[0] instanceof Group_shape)
+		MyShape[] Selected = GroupGraphics.getSelectedShape();
+		if(Selected != null && Selected.length == 1 )
 		{
-			((Group_shape)Selected[0]).removeGroup();
-			GPs.removeG(Selected[0]);
+			if(Selected[0].removeGroup() == true)
+			{
+				GroupGraphics.removeG(Selected[0]);
+			}
 		}
 	}
 

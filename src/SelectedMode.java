@@ -11,7 +11,7 @@ public class SelectedMode extends Mode
 	private MyShape BeDraggedShape = null;
 	private Point LastPressedPoint =null ;
 	
-	public SelectedMode(GroupGraphic gg)
+	public SelectedMode(MyGraphic gg)
 	{
 		super(gg);
 	}
@@ -62,7 +62,7 @@ public class SelectedMode extends Mode
 			// Select many shapes mode
 			Point TopLeft = new Point(Math.min(LastPressedPoint.x, CurrentPoint.x),Math.min(LastPressedPoint.y, CurrentPoint.y));
 			Point DownRight = new Point(Math.max(LastPressedPoint.x, CurrentPoint.x),Math.max(LastPressedPoint.y, CurrentPoint.y));
-			super.graphics.setConnShowUnderTheArea(TopLeft, DownRight);
+			super.graphics.setPortShowUnderTheArea(TopLeft, DownRight);
 		}
 		else
 		{

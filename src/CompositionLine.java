@@ -21,8 +21,8 @@ public class CompositionLine extends MyLine
 		Point startPoint_pos = getPortPosition(startPort);
 		Point endPoint_pos = getPortPosition(endPort);
 		
-		double theta = Math.atan2((double)(endPoint_pos.y+super.offset - startPoint_pos.y+super.offset), (double)(endPoint_pos.x+super.offset - startPoint_pos.x+super.offset));
-		drawArrow(g2, theta, (double)endPoint_pos.x+super.offset, (double)endPoint_pos.y+super.offset, startPoint_pos);
+		double theta = Math.atan2((double)(endPoint_pos.y - startPoint_pos.y), (double)(endPoint_pos.x - startPoint_pos.x));
+		drawArrow(g2, theta, (double)endPoint_pos.x, (double)endPoint_pos.y, startPoint_pos);
 	}
 	private void drawArrow(Graphics2D g2, double theta, double x0, double y0, Point startPoint_pos)
 	{

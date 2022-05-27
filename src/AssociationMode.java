@@ -8,7 +8,7 @@ import Port.Port;
 public class AssociationMode extends Mode
 {
 	private Point LastPressedPoint =null ;
-	public AssociationMode(GroupGraphic gg)
+	public AssociationMode(MyGraphic gg)
 	{
 		super(gg);
 	}
@@ -30,8 +30,8 @@ public class AssociationMode extends Mode
 		MyShape[] GoodShape = super.graphics.IsPriliegedLine(LastPressedPoint, CurrentPoint);
 		if(GoodShape != null)
 		{
-			Port startPort = GoodShape[0].AlignAtPort(LastPressedPoint);
-			Port endPort = GoodShape[1].AlignAtPort(CurrentPoint);
+			Port startPort = GoodShape[0].AlignMouseAtPort(LastPressedPoint);
+			Port endPort = GoodShape[1].AlignMouseAtPort(CurrentPoint);
 			super.graphics.addG(new AssociationLine(startPort, endPort));
 		}
 	}

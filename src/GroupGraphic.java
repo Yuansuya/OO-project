@@ -4,51 +4,44 @@ import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
 // import IBehavior.*;
-public class GroupGraphic
+public class GroupGraphic extends MyGraphic
 {
-	java.util.List<MyGraphic> MyGraphics = new ArrayList<>();
-	java.util.List<MyShape> MyShapes = new ArrayList<>();
-	
+		
 	// graphicBehavior bevior ;
-	// List<MyGraphic> shapes ;
+	java.util.List<MyGraphic> MyGraphics ;
 	
-	// public GroupGraphic()
-	// {
-		// shapes = AllShapes.getInstance().getGraphics();
+	public GroupGraphic()
+	{
+		MyGraphics = AllShapes.getInstance().getGraphics();
 		// bevior = new GroupBehavior();
-	// }
+	}
 	
 	public void Draw(Graphics g)
 	{
+		//composite pattern : draw all graphics
 		for(MyGraphic gp : MyGraphics)
 			gp.Draw(g);
 	}
 	public void addG(MyGraphic o)
 	{
 		MyGraphics.add(o);
-		if(o instanceof MyShape)
-			MyShapes.add((MyShape)o);
-		
-		System.out.println("number of Myshape " + MyShapes.size());
+		System.out.println("number of Myshape " + MyGraphics.size());
 	}
 	public void removeG(MyGraphic o)
 	{
 		MyGraphics.remove(o);
-		if(o instanceof MyShape)
-			MyShapes.remove(o);
-		System.out.println("number of Myshape " + MyShapes.size());
+		System.out.println("number of Myshape " + MyGraphics.size());
 	}
 	public MyShape[] GetShapesUnderTheMouse(Point p)
 	{
-		if(MyShapes == null)
-			return null;
-		
+		if(this.MyGraphics == null)
+			return null ;
 		java.util.List<MyShape> shapes = new ArrayList<>();
 		
-		for(MyShape sp : this.MyShapes)
+		for(MyGraphic gp : this.MyGraphics)
 		{
-			if(sp.IsMouseInShape(p) != null && sp.getGrouped() == false)
-				shapes.add(sp);
+			if(gp.getShapeInTheMouse(p) != null && gp.getGrouped() == false)
+				shapes.add((MyShape)gp);
 		}
 	
 		if(shapes.size() == 0)
@@ -58,23 +51,23 @@ public class GroupGraphic
 	}
 	public void clearSelectedShapes()
 	{
-		if(this.MyShapes != null )
+		if(this.MyGraphics != null )
 		{
-			for(MyShape sp : this.MyShapes)
+			for(MyGraphic gp : this.MyGraphics)
 			{
-				sp.setPortShow(false);
+				gp.setPortShow(false);
 			}
 		}
 	}
 	
-	public void setConnShowUnderTheArea(Point TopLeft, Point DownRight)
+	public void setPortShowUnderTheArea(Point TopLeft, Point DownRight)
 	{
-		if(this.MyShapes != null )
+		if(this.MyGraphics != null )
 		{
-			for(MyShape sp : this.MyShapes)
+			for(MyGraphic gp : this.MyGraphics)
 			{
-				if(sp.IsShapeInArea(TopLeft, DownRight))
-					sp.setPortShow(true);
+				if(gp.IsShapeInArea(TopLeft, DownRight))
+					gp.setPortShow(true);
 			}
 		}
 		
@@ -84,16 +77,16 @@ public class GroupGraphic
 	{
 		MyShape LastPressedShape =null;
 		MyShape ReleasedShape =null;
-		if(this.MyShapes != null )
+		if(this.MyGraphics != null )
 		{
-			for(MyShape sp : this.MyShapes)
+			for(MyGraphic gp : this.MyGraphics)
 			{
-				if(sp.getGrouped() || sp instanceof Group_shape)
+				if(gp.getGrouped())
 					continue; 
 				if(LastPressedShape == null)
-					LastPressedShape = sp.IsMouseInShape(LastPressedPoint);
+					LastPressedShape = gp.getShapeInTheMouse(LastPressedPoint);
 				if(ReleasedShape == null)
-					ReleasedShape = sp.IsMouseInShape(CurrentPoint); 
+					ReleasedShape = gp.getShapeInTheMouse(CurrentPoint); 
 				if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape )
 					return new MyShape[]{LastPressedShape, ReleasedShape};		
 			}
@@ -104,14 +97,14 @@ public class GroupGraphic
 	
 	public MyShape[] getSelectedShape()
 	{
-		if(MyShapes == null)
+		if(MyGraphics == null)
 			return null ;
 		java.util.List<MyShape> shapes = new ArrayList<>();
 	
-		for(MyShape sp : this.MyShapes)
+		for(MyGraphic gp : this.MyGraphics)
 		{
-			if(sp.getPortShow() )
-				shapes.add(sp);
+			if(gp.getPortShow() )
+				shapes.add((MyShape)gp);
 		}
 		if(shapes.size() == 0)
 			return null;

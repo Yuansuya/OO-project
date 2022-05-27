@@ -6,9 +6,9 @@ import MyGraphic.*;
 public abstract class Mode
 {
 	protected GroupGraphic graphics ;
-	public Mode(GroupGraphic gg)
+	public Mode(MyGraphic gg)
 	{
-		this.graphics = gg ;
+		this.graphics = (GroupGraphic)gg ;
 	}
 	public abstract void ClickAction(Point CurrentPoint);
 	public abstract void DragAction(Point CurrentPoint);

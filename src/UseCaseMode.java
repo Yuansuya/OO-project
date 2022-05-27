@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.*;
 public class UseCaseMode extends Mode
 {
-	public UseCaseMode(GroupGraphic gg)
+	public UseCaseMode(MyGraphic gg)
 	{
 		super(gg);
 	}

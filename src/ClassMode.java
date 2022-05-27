@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.*;
 public class ClassMode extends Mode
 {
-	public ClassMode(GroupGraphic gg)
+	public ClassMode(MyGraphic gg)
 	{
 		super(gg);
 	}
