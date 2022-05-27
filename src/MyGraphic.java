@@ -37,7 +37,7 @@ public abstract class MyGraphic
 	{
 		return false;
 	}
-	public MyShape getShapeInTheMouse(Point CurrentPoint)
+	public MyShape getShapeUnderTheMouse(Point CurrentPoint)
 	{
 		return null;
 	}
@@ -54,5 +54,9 @@ public abstract class MyGraphic
 	public int[] getBorders()
 	{
 		return null;
+	}
+	public int getDepth()
+	{
+		return -1 ;
 	}
 }

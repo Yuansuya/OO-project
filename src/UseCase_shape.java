@@ -5,9 +5,9 @@ import MyGraphic.*;
 import Port.Port ;
 public class UseCase_shape extends MyShape
 {
-	public UseCase_shape(Point SP)
+	public UseCase_shape(Point SP, int depth_counter)
 	{
-		super(SP);	
+		super(SP, depth_counter);	
 	}
 	public void Draw(Graphics g)
 	{

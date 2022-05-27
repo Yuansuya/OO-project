@@ -15,16 +15,13 @@ public class SelectedMode extends Mode
 	{
 		super(gg);
 	}
-	public void ClickAction(Point CurrentPoint)
+	public void ClickAction(Point CurrentPoint, int depth_counter)
 	{
 		super.graphics.clearSelectedShapes();
-		MyShape[] SelectedShape = super.graphics.GetShapesUnderTheMouse(CurrentPoint);
+		MyShape SelectedShape = super.graphics.GetShapeUnderTheMouse(CurrentPoint);
 		if(SelectedShape != null)
 		{
-			for(MyShape sp : SelectedShape)
-			{
-				sp.setPortShow(true);
-			}
+			SelectedShape.setPortShow(true);
 		}
 	}
 	public void DragAction(Point CurrentPoint)
@@ -41,7 +38,7 @@ public class SelectedMode extends Mode
 	{
 		super.graphics.clearSelectedShapes();
 		
-		MyShape[] SelectedShape = super.graphics.GetShapesUnderTheMouse(CurrentPoint);
+		MyShape SelectedShape = super.graphics.GetShapeUnderTheMouse(CurrentPoint);
 		if(SelectedShape == null)
 		{
 			// Selected many shape mode 
@@ -51,7 +48,7 @@ public class SelectedMode extends Mode
 		{
 			// Drag a shape mode 
 			SelectOrDragMode = true;
-			BeDraggedShape = SelectedShape[0];
+			BeDraggedShape = SelectedShape;
 		}
 		LastPressedPoint = CurrentPoint;
 	}

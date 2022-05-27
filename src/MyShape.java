@@ -22,7 +22,7 @@ public class MyShape extends MyGraphic
 	{
 		// graphicBehavior = new ShapeBehavior(this);
 	}
-	public MyShape(Point SP)
+	public MyShape(Point SP, int depth_counter)
 	{
 		this.Corners[0] = SP;
 		this.Corners[1] = new Point(SP.x + width, SP.y);
@@ -34,6 +34,7 @@ public class MyShape extends MyGraphic
 		this.ports[2] = new Port(new Point(SP.x + width/2, SP.y + height));
 		this.ports[3] = new Port(new Point(SP.x, SP.y + height/2));
 		
+		this.depth = depth_counter;
 		// graphicBehavior = new ShapeBehavior(this);
 	}
 
@@ -66,7 +67,7 @@ public class MyShape extends MyGraphic
 	// @param CurrentPoint refers to where the mouse point now
 	// output Myshape : return the shape which be pointed if has
 														  // else null
-	public MyShape getShapeInTheMouse(Point CurrentPoint)
+	public MyShape getShapeUnderTheMouse(Point CurrentPoint)
 	{
 		int x_axis = CurrentPoint.x - this.Corners[0].x;
 		if(x_axis < 0 || x_axis > this.width)
@@ -153,5 +154,10 @@ public class MyShape extends MyGraphic
 	public boolean removeGroup()
 	{
 		return false;
+	}
+	
+	public int getDepth()
+	{
+		return this.depth;
 	}
 }

@@ -10,7 +10,7 @@ public abstract class Mode
 	{
 		this.graphics = (GroupGraphic)gg ;
 	}
-	public abstract void ClickAction(Point CurrentPoint);
+	public abstract void ClickAction(Point CurrentPoint,int depth_counter);
 	public abstract void DragAction(Point CurrentPoint);
 	public abstract void PressedAction(Point CurrentPoint);
 	public abstract void ReleaseAction(Point CurrentPoint);

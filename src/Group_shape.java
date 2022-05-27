@@ -8,10 +8,11 @@ public class Group_shape extends MyShape
 {
 	private MyShape[] group_shapes ; 	
 	private int offset = 10; //frame all group shpaes by move outward offest 
-	public Group_shape(MyShape[] shapes)
+	public Group_shape(MyShape[] shapes, int depth_counter)
 	{
 		
 		this.group_shapes = shapes;
+		super.depth = depth_counter ;
 		joinGroup();
 		
 		int[] MaxAndMinBorders = calculateBorder();//{min_x, min_y, max_x, max_y}

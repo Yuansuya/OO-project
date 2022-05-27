@@ -10,10 +10,10 @@ public class UseCaseMode extends Mode
 	{
 		super(gg);
 	}
-	public void ClickAction(Point CurrentPoint)
+	public void ClickAction(Point CurrentPoint, int depth_counter)
 	{
 		super.graphics.clearSelectedShapes();
-		super.graphics.addG(new UseCase_shape(CurrentPoint));
+		super.graphics.addG(new UseCase_shape(CurrentPoint, depth_counter));
 	}
 	public void DragAction(Point CurrentPoint)
 	{

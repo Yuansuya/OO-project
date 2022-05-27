@@ -32,22 +32,28 @@ public class GroupGraphic extends MyGraphic
 		MyGraphics.remove(o);
 		System.out.println("number of Myshape " + MyGraphics.size());
 	}
-	public MyShape[] GetShapesUnderTheMouse(Point p)
+	public MyShape GetShapeUnderTheMouse(Point p)
 	{
 		if(this.MyGraphics == null)
 			return null ;
-		java.util.List<MyShape> shapes = new ArrayList<>();
-		
+		MyShape return_shape = null ;	
 		for(MyGraphic gp : this.MyGraphics)
 		{
-			if(gp.getShapeInTheMouse(p) != null && gp.getGrouped() == false)
-				shapes.add((MyShape)gp);
+			if(gp.getShapeUnderTheMouse(p) != null && gp.getGrouped() == false)
+			{
+				//first shape
+				if(return_shape == null)
+				{
+					return_shape = (MyShape)gp;
+				}
+				else if(return_shape.getDepth() < gp.getDepth())
+				{
+					return_shape = (MyShape)gp;
+				}
+			}				
 		}
-	
-		if(shapes.size() == 0)
-			return null;
-		else
-			return shapes.toArray(new MyShape[shapes.size()]);
+
+		return return_shape;
 	}
 	public void clearSelectedShapes()
 	{
@@ -84,9 +90,9 @@ public class GroupGraphic extends MyGraphic
 				if(gp.getGrouped())
 					continue; 
 				if(LastPressedShape == null)
-					LastPressedShape = gp.getShapeInTheMouse(LastPressedPoint);
+					LastPressedShape = gp.getShapeUnderTheMouse(LastPressedPoint);
 				if(ReleasedShape == null)
-					ReleasedShape = gp.getShapeInTheMouse(CurrentPoint); 
+					ReleasedShape = gp.getShapeUnderTheMouse(CurrentPoint); 
 				if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape )
 					return new MyShape[]{LastPressedShape, ReleasedShape};		
 			}

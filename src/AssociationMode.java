@@ -12,7 +12,7 @@ public class AssociationMode extends Mode
 	{
 		super(gg);
 	}
-	public void ClickAction(Point CurrentPoint)
+	public void ClickAction(Point CurrentPoint, int depth_counter)
 	{
 		
 	}

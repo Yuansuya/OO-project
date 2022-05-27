@@ -15,6 +15,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	private MyButton CurrentButton = null;
 	private int CurrentBarMode = -1;
 	private MyGraphic GroupGraphics ;
+	private int depth_counter = 0 ;
 	
 	public DrawPanel(Point StartPoint,int WidthSize,int HeightSize,ButtonPanel bp, MyMenuBar mb, MyGraphic gg ) {
 		this.setLayout(null);
@@ -53,9 +54,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		// GPs.clearSelectedShapes();			
 		if(CurrentButton != null)
 		{
-			CurrentButton.getMode().ClickAction(CurrentPoint);
+			CurrentButton.getMode().ClickAction(CurrentPoint, depth_counter);
 		}
-		
+		depth_counter++;
 		repaint();
 	}
 	public void mouseEntered(MouseEvent me) {}
@@ -125,8 +126,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 		MyShape[] Selected = GroupGraphics.getSelectedShape();
 		if(Selected != null && Selected.length > 1 )
 		{
-			GroupGraphics.addG(new Group_shape(Selected));
+			GroupGraphics.addG(new Group_shape(Selected, depth_counter));
 		}
+		depth_counter++;
 	}
 	
 	private void UngroupAction()

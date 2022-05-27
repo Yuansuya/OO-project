@@ -5,9 +5,9 @@ import MyGraphic.*;
 import Port.Port ;
 public class class_shape extends MyShape
 {
-	public class_shape(Point SP)
+	public class_shape(Point SP, int depth_counter)
 	{
-		super(SP);	
+		super(SP, depth_counter);	
 	}
 	@Override
 	public void Draw(Graphics g)
