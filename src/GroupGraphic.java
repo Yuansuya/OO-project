@@ -76,10 +76,10 @@ public class GroupGraphic extends MyGraphic
 		
 	}	
 	
-	public MyShape[] IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
+	public MyGraphic[] IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
 	{
-		MyShape LastPressedShape =null;
-		MyShape ReleasedShape =null;
+		MyGraphic LastPressedShape =null;
+		MyGraphic ReleasedShape =null;
 		if(this.MyGraphics != null )
 		{
 			for(MyGraphic gp : this.MyGraphics)
@@ -87,11 +87,11 @@ public class GroupGraphic extends MyGraphic
 				if(gp.getGrouped())
 					continue; 
 				if(LastPressedShape == null && gp.IsShapeUnderTheMouse(LastPressedPoint) == true)
-					LastPressedShape = (MyShape)gp ;
+					LastPressedShape = gp ;
 				if(ReleasedShape == null && gp.IsShapeUnderTheMouse(CurrentPoint) == true)
-					ReleasedShape = (MyShape)gp; 
+					ReleasedShape = gp; 
 				if(LastPressedShape != null && ReleasedShape != null && LastPressedShape != ReleasedShape )
-					return new MyShape[]{LastPressedShape, ReleasedShape};		
+					return new MyGraphic[]{LastPressedShape, ReleasedShape};		
 			}
 		}
 		

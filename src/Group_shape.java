@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import MyGraphic.*;
+import Port.Port;
 
 public class Group_shape extends MyShape
 {
@@ -97,5 +98,9 @@ public class Group_shape extends MyShape
 		}
 		return true;
 	}
-	
+	@Override
+	public Port AlignMouseAtPort(Point CurrentPoint)
+	{
+		return null;
+	}
 }

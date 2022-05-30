@@ -77,7 +77,7 @@ public class MyShape extends MyGraphic
 	// Output is the nearest port with input current point
 	public Port AlignMouseAtPort(Point CurrentPoint)
 	{
-		
+
 		int PORTNUM = -1 ;
 		double distance = 99999;
 		for(int i = 0 ; i < 4 ; ++i )

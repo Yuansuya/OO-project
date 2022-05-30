@@ -27,12 +27,13 @@ public class AssociationMode extends Mode
 	}
 	public void ReleaseAction(Point CurrentPoint)
 	{
-		MyShape[] GoodShape = super.graphics.IsPriliegedLine(LastPressedPoint, CurrentPoint);
+		MyGraphic[] GoodShape = super.graphics.IsPriliegedLine(LastPressedPoint, CurrentPoint);
 		if(GoodShape != null)
 		{
 			Port startPort = GoodShape[0].AlignMouseAtPort(LastPressedPoint);
 			Port endPort = GoodShape[1].AlignMouseAtPort(CurrentPoint);
-			super.graphics.addG(new AssociationLine(startPort, endPort));
+			if(startPort != null && endPort != null)
+				super.graphics.addG(new AssociationLine(startPort, endPort));
 		}
 	}
 }

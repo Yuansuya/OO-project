@@ -17,7 +17,7 @@ public abstract class MyGraphic
 	}
 	public void clearSelectedShapes(){}
 	public void setPortShowUnderTheArea(Point TopLeft, Point DownRight){}
-	public MyShape[] IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
+	public MyGraphic[] IsPriliegedLine(Point LastPressedPoint, Point CurrentPoint)
 	{
 		return null;
 	}
