@@ -5,10 +5,9 @@ Object-Oriented analysis and design Project
 
 ### Complier 
 
-進到某個檔案底下執行
-Example : complie /src/MyGraphic/class_shape.java
+一次編譯所有檔案，先進到src目錄下
 ```shell
-javac -d ../../classes -cp ../../classes class_shape.java
+javac -d ../classes -cp ../classes *.java
 ```
 ### Execute
 
