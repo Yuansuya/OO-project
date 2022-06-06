@@ -1,5 +1,3 @@
-import MyShape.*;
-import MyLine.*;
 import MyPanel.*;
 import MyMenuBar.*;
 import javax.swing.*;
