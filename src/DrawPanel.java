@@ -51,7 +51,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 	}
 	public void mouseClicked(MouseEvent me) {
 		Point CurrentPoint = me.getPoint();
-		// GPs.clearSelectedShapes();			
 		if(CurrentButton != null)
 		{
 			CurrentButton.getMode().ClickAction(CurrentPoint, depth_counter);

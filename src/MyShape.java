@@ -142,7 +142,7 @@ public class MyShape extends MyGraphic
 	{
 		return new int[]{this.Corners[0].x, this.Corners[0].y, this.Corners[2].x, this.Corners[2].y};
 	}
-	//return true refers to OK that means it's a Group_shape,false refers to NOT OK that means it's not a Group_shape
+	//return true refers to it's a Group_shape,false refers to it's not a Group_shape
 	public boolean removeGroup()
 	{
 		return false;

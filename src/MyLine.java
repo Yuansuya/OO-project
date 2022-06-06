@@ -25,6 +25,7 @@ public class MyLine extends MyGraphic
 		;
 	}
 
+	//get the exact location of startPort or endPort
 	protected Point getPortPosition(Port p)
 	{
 		return p.getPosition();
