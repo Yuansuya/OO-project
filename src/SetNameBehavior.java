@@ -12,9 +12,12 @@ public class SetNameBehavior implements IBarBehavior
 		JFrame f =new JFrame("Change Object Name.");
 		f.setSize(400,300);
 		String input = JOptionPane.showInputDialog("Change Object Name");
+		if(input != null)
+		{
+			MyShape[] ToBeChangeNameShape = graphics.getSelectedShape();
+			if(ToBeChangeNameShape != null && ToBeChangeNameShape.length ==1)
+				ToBeChangeNameShape[0].setName(input);
+		}
 		
-		MyShape[] ToBeChangeNameShape = graphics.getSelectedShape();
-		if(ToBeChangeNameShape != null && ToBeChangeNameShape.length ==1)
-			ToBeChangeNameShape[0].setName(input);
 	}
 }

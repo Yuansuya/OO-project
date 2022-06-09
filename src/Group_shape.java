@@ -81,7 +81,7 @@ public class Group_shape extends MyShape
 		//move the Group_shape's border
 		super.revisePosition(offset_x, offset_y);
 
-		//move shapes in the gorup
+		//move shapes which are the shape in the group
 		for(MyShape sp : group_shapes)
 		{
 			sp.move(offset_x, offset_y);
