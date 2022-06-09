@@ -3,7 +3,7 @@ Object-Oriented analysis and design Project
 
 ## Project running usage
 
-### Complier 
+### Compiler 
 
 一次編譯所有檔案，先進到src目錄下
 ```shell
